@@ -11,6 +11,7 @@ from DataSet import DataSet
 from NeuralNetwork import NeuralNetwork
 from LeNet5 import LeNet5
 from AlexNet import AlexNet
+from VGG16 import VGG16
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -147,9 +148,41 @@ def train_alexnet(dataset, batch_size, num_classes, learning_rate, num_epochs):
         test(test_loader, model, loss_fn)
     print("Done!")
 
+def train_vgg16(dataset, batch_size, num_classes, learning_rate, num_epochs):
+    
+    grayscale = False
+    if dataset == "FashionMNIST":
+        data = DataSet('FashionMNIST', batch_size=batch_size, input_size=227)
+    
+        train_loader = data.train_dataloader
+        test_loader = data.test_dataloader
+
+        grayscale = True
+
+    elif dataset == "CIFAR10":
+        data = DataSet('CIFAR10', batch_size=batch_size, input_size=227)
+    
+        train_loader = data.train_dataloader
+        test_loader = data.test_dataloader
+        
+        grayscale = False
+    
+    model = VGG16(num_classes=num_classes, grayscale=grayscale).to(device)
+    
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = 0.005, momentum = 0.9)  
+
+    
+    for t in range(num_epochs):
+        print(f"Epoch {t+1}\n-------------------------------")
+        train(train_loader, model, loss_fn, optimizer)
+        test(test_loader, model, loss_fn)
+    print("Done!")
+
 def main():    
     # train_lenet5(dataset = "CIFAR10", batch_size=batch_size, learning_rate=learning_rate, num_classes=num_classes, num_epochs=num_epochs)
-    train_alexnet(dataset = "CIFAR10", batch_size=batch_size, learning_rate=learning_rate, num_classes=num_classes, num_epochs=num_epochs)
+    # train_alexnet(dataset = "CIFAR10", batch_size=batch_size, learning_rate=learning_rate, num_classes=num_classes, num_epochs=num_epochs)
+    train_vgg16(dataset = "CIFAR10", batch_size=batch_size, learning_rate=learning_rate, num_classes=num_classes, num_epochs=num_epochs)
 
 if __name__ == "__main__":
     main()
