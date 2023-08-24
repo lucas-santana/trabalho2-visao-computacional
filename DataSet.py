@@ -3,7 +3,7 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
 class DataSet():
-    def __init__(self, dataset_type, batch_size):
+    def __init__(self, dataset_type, batch_size, input_size):
         self.dataset_type = dataset_type
         
         if self.dataset_type == 'FashionMNIST':
@@ -13,7 +13,7 @@ class DataSet():
                         train=True,
                         download=True,
                         transform = transforms.Compose([
-                                                          transforms.Resize((32,32)),
+                                                          transforms.Resize((input_size, input_size)),
                                                           transforms.ToTensor()
                                                         ]),
             )
@@ -23,7 +23,7 @@ class DataSet():
                     train=False,
                     download=True,
                     transform = transforms.Compose([
-                                                transforms.Resize((32,32)),
+                                                transforms.Resize((input_size, input_size)),
                                                 transforms.ToTensor()
                                             ])
             )
@@ -38,7 +38,7 @@ class DataSet():
                         train=True,
                         download=True,
                         transform = transforms.Compose([
-                                                          transforms.Resize((32,32)),
+                                                          transforms.Resize((input_size,input_size)),
                                                           transforms.ToTensor()
                                                         ]),
             )
@@ -48,7 +48,7 @@ class DataSet():
                     train=False,
                     download=True,
                     transform = transforms.Compose([
-                                                transforms.Resize((32,32)),
+                                                transforms.Resize((input_size,input_size)),
                                                 transforms.ToTensor()
                                             ])
             )
