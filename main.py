@@ -4,9 +4,12 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
-from hyperparameters import batch_size, num_classes, learning_rate, num_epochs
+from hyperparameters import batch_size, learning_rate, num_epochs, weight_decay, momentum
 
 from DataSet import DataSet
+
+from NetworksEnum import Networks
+from DatasetTypeEnum import DataSetType
 
 from NeuralNetwork import NeuralNetwork
 from LeNet5 import LeNet5
@@ -21,7 +24,7 @@ print(f"Using {device} device")
     https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-lenet5-cifar10.ipynb
     https://github.com/gradient-ai/LeNet5-Tutorial
 """
-
+    
 def train(dataloader, model, loss_fn, optimizer):
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
@@ -86,103 +89,40 @@ def test(dataloader, model, loss_fn):
     correct /= size
     # LOG: mostra a acurácia e a perda
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-
-def train_lenet5(dataset, batch_size, num_classes, learning_rate, num_epochs):
+     
+def model_train(network, dataset, batch_size, learning_rate, num_epochs):
     
-    grayscale = False
-    if dataset == "FashionMNIST":
-        data = DataSet('FashionMNIST', batch_size=batch_size, input_size=32)
-    
-        train_loader = data.train_dataloader
-        test_loader = data.test_dataloader
-
-        grayscale = True
-
-    elif dataset == "CIFAR10":
-        data = DataSet('CIFAR10', batch_size=batch_size, input_size=32)
-    
-        train_loader = data.train_dataloader
-        test_loader = data.test_dataloader
-
-        grayscale = False
-    
-    model = LeNet5(num_classes=num_classes, grayscale=grayscale).to(device)
+    if network == Networks.LENET5.value:
+        data = DataSet(dataset, batch_size=batch_size, input_size=32)
+        model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    elif network == Networks.ALEXNET.value:
+        data = DataSet(dataset, batch_size=batch_size, input_size=227)
+        model = AlexNet(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    elif network == Networks.VGG16.value:
+        data = DataSet(dataset, batch_size=batch_size, input_size=224)
+        model = VGG16(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    else:
+        raise Exception("Network not supported: ", network)
     
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = weight_decay, momentum = momentum)
     
     for t in range(num_epochs):
         print(f"Epoch {t+1}\n-------------------------------")
-        train(train_loader, model, loss_fn, optimizer)
-        test(test_loader, model, loss_fn)
+        train(data.train_dataloader, model, loss_fn, optimizer)
+        test(data.test_dataloader, model, loss_fn)
     print("Done!")
+    
+    return model
 
-def train_alexnet(dataset, batch_size, num_classes, learning_rate, num_epochs):
+def main():
+    dataset = DataSetType.FASHIONMNIST
+    network = Networks.ALEXNET
     
-    grayscale = False
-    if dataset == "FashionMNIST":
-        data = DataSet('FashionMNIST', batch_size=batch_size, input_size=227)
+    print("DataSet: ", dataset.name)
+    print("Network: ", network.name)
     
-        train_loader = data.train_dataloader
-        test_loader = data.test_dataloader
-
-        grayscale = True
-
-    elif dataset == "CIFAR10":
-        data = DataSet('CIFAR10', batch_size=batch_size, input_size=227)
-    
-        train_loader = data.train_dataloader
-        test_loader = data.test_dataloader
-        
-        grayscale = False
-    
-    model = AlexNet(num_classes=num_classes, grayscale=grayscale).to(device)
-    
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = 0.005, momentum = 0.9)  
-
-    
-    for t in range(num_epochs):
-        print(f"Epoch {t+1}\n-------------------------------")
-        train(train_loader, model, loss_fn, optimizer)
-        test(test_loader, model, loss_fn)
-    print("Done!")
-
-def train_vgg16(dataset, batch_size, num_classes, learning_rate, num_epochs):
-    
-    grayscale = False
-    if dataset == "FashionMNIST":
-        data = DataSet('FashionMNIST', batch_size=batch_size, input_size=227)
-    
-        train_loader = data.train_dataloader
-        test_loader = data.test_dataloader
-
-        grayscale = True
-
-    elif dataset == "CIFAR10":
-        data = DataSet('CIFAR10', batch_size=batch_size, input_size=227)
-    
-        train_loader = data.train_dataloader
-        test_loader = data.test_dataloader
-        
-        grayscale = False
-    
-    model = VGG16(num_classes=num_classes, grayscale=grayscale).to(device)
-    
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = 0.005, momentum = 0.9)  
-
-    
-    for t in range(num_epochs):
-        print(f"Epoch {t+1}\n-------------------------------")
-        train(train_loader, model, loss_fn, optimizer)
-        test(test_loader, model, loss_fn)
-    print("Done!")
-
-def main():    
-    # train_lenet5(dataset = "CIFAR10", batch_size=batch_size, learning_rate=learning_rate, num_classes=num_classes, num_epochs=num_epochs)
-    # train_alexnet(dataset = "CIFAR10", batch_size=batch_size, learning_rate=learning_rate, num_classes=num_classes, num_epochs=num_epochs)
-    train_vgg16(dataset = "CIFAR10", batch_size=batch_size, learning_rate=learning_rate, num_classes=num_classes, num_epochs=num_epochs)
+    model_train(network=network.value, dataset=dataset.value, batch_size=batch_size, learning_rate=learning_rate, num_epochs=num_epochs)
 
 if __name__ == "__main__":
     main()

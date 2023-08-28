@@ -7,13 +7,13 @@ from torchvision import datasets, transforms
 
 #Defining the convolutional neural network
 class LeNet5(nn.Module):
-    def __init__(self, num_classes, grayscale=False):
+    def __init__(self, num_classes, gray_scale=False):
         super(LeNet5, self).__init__()
         
-        self.grayscale = grayscale
+        self.gray_scale = gray_scale
         self.num_classes = num_classes
         
-        if self.grayscale:
+        if self.gray_scale:
             in_channels = 1
         else:
             in_channels = 3

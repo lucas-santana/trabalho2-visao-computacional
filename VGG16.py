@@ -1,7 +1,7 @@
 from torch import nn
 
 class VGG16(nn.Module):
-    def __init__(self, num_classes, grayscale=False):
+    def __init__(self, num_classes, gray_scale=False):
         super(VGG16, self).__init__()
         self.layer1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
