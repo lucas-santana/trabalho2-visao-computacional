@@ -7,7 +7,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 from torchvision import datasets, transforms
 
-from Hyperparameters import batch_size, learning_rate, num_epochs, weight_decay, momentum
+from Hyperparameters import batch_size, learning_rate, weight_decay, momentum
 
 from DataSet import DataSet
 
@@ -19,6 +19,7 @@ from networks.LeNet5 import LeNet5
 from networks.AlexNet import AlexNet
 from networks.VGG16 import VGG16
 
+from plot import plot_loss
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
@@ -30,53 +31,60 @@ writer = SummaryWriter()
     https://github.com/gradient-ai/LeNet5-Tutorial
 """
     
-def train(dataloader, model, loss_fn, optimizer, epoch):
+def train_loop(dataloader, model, loss_fn, optimizer, epoch):
+    last_loss = 0.
+    
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
-    # Indica que o modelo está em processo de treinamento
+    
+    # Set the model to training mode - important for batch normalization and dropout layers
+    # Unnecessary in this situation but added for best practices
     model.train()
-
+    
     # Itera sobre os lotes
-    for batch, (X, y) in enumerate(dataloader):
+    for step, (X, y) in enumerate(dataloader):
+        
         # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
         X, y = X.to(device), y.to(device)
-
-        # Faz a predição para os valores atuais dos parâmetros
-        pred = model(X)
-
-        # Estima o valor da função de perda
-        loss = loss_fn(pred, y)
-
+        
+        # Compute prediction and loss
+        # forward pass        
+        pred = model(X) # Faz a predição para os valores atuais dos parâmetros
+        loss = loss_fn(pred, y)  # Estima o valor da função de perda
+    
         # Backpropagation
+        optimizer.zero_grad() # Limpa os gradientes
+        loss.backward() # Estima os gradientes
+        optimizer.step() # Atualiza os pesos da rede
+        
+        last_loss = loss
+        
+        if step % 100 == 0:
+            
+            loss, current = loss.item(), step * len(X)
+            
+            print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+        
+    return last_loss
+            
 
-        # Limpa os gradientes
-        optimizer.zero_grad()
-
-        # Estima os gradientes
-        loss.backward()
-
-        # Atualiza os pesos da rede
-        optimizer.step()
-
-        # LOG: A cada 100 lotes (iterações) mostra a perda
-        if batch % 100 == 0:
-            loss, current = loss.item(), batch * len(X)
-            writer.add_scalar("Loss/train", loss, epoch)
-            print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
-
-def test(dataloader, model, loss_fn):
+def test_loop(dataloader, model, loss_fn):
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
 
     # Obtém o número de lotes (iterações)
     num_batches = len(dataloader)
 
-    # Indica que o modelo está em processo de teste    
-    model.eval()
+    # Set the model to evaluation mode - important for batch normalization and dropout layers
+    # Unnecessary in this situation but added for best practices   
+    model.eval() # Indica que o modelo está em processo de teste 
 
     # Inicializa a perda de teste e a quantidade de acertos com 0
     test_loss, correct = 0, 0
 
+    
+    # Evaluating the model with torch.no_grad() ensures that no gradients are computed during test mode
+    # also serves to reduce unnecessary gradient computations and memory usage for tensors with requires_grad=True
     # Desabilita o cálculo do gradiente
     with torch.no_grad():
         # Itera sobre o conjunto de teste
@@ -127,11 +135,17 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = weight_decay, momentum = momentum)
     
-    for t in range(num_epochs):
-        print(f"Epoch {t+1}\n-------------------------------")
-        train(data.train_dataloader, model, loss_fn, optimizer, t)
-        test(data.test_dataloader, model, loss_fn)
+    losses = []
+    for epoch in range(num_epochs):
+        print(f"Epoch {epoch+1}\n-------------------------------")
+        
+        loss = train_loop(data.train_dataloader, model, loss_fn, optimizer, epoch)
+        losses.append(loss.item())
+        
+    test_loop(data.test_dataloader, model, loss_fn)
     print("Done!")
+    print(losses)
+    plot_loss(losses)
     
     
     return model
@@ -147,6 +161,7 @@ def main():
     
     dataset = DataSetType[args.dataset]
     network = Networks[args.network]
+    num_epochs = args.epochs
     
     print("DataSet: ", dataset.name)
     print("Network: ", network.name)

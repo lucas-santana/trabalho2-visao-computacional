@@ -3,7 +3,9 @@
 # Criação do ambiente
 
 CPU
--  conda create -n trab2_visao -c pytorch pytorch torchvision torchaudio cpuonly numpy matplotlib
+-  conda create -n trab2_visao -c pytorch pytorch torchvision torchaudio cpuonly numpy matplotlib tensorboard
+
+GPU
 
 # Execução do programa
 
