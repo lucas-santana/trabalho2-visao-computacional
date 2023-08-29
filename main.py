@@ -3,9 +3,11 @@ import os
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
+
 from torchvision import datasets, transforms
 
-from hyperparameters import batch_size, learning_rate, num_epochs, weight_decay, momentum
+from Hyperparameters import batch_size, learning_rate, num_epochs, weight_decay, momentum
 
 from DataSet import DataSet
 
@@ -13,20 +15,22 @@ from NetworksEnum import Networks
 from DatasetTypeEnum import DataSetType
 
 from NeuralNetwork import NeuralNetwork
-from models.LeNet5 import LeNet5
-from models.AlexNet import AlexNet
-from models.VGG16 import VGG16
+from networks.LeNet5 import LeNet5
+from networks.AlexNet import AlexNet
+from networks.VGG16 import VGG16
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
+
+writer = SummaryWriter()
 
 """
     https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-lenet5-cifar10.ipynb
     https://github.com/gradient-ai/LeNet5-Tutorial
 """
     
-def train(dataloader, model, loss_fn, optimizer):
+def train(dataloader, model, loss_fn, optimizer, epoch):
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
     # Indica que o modelo está em processo de treinamento
@@ -57,6 +61,7 @@ def train(dataloader, model, loss_fn, optimizer):
         # LOG: A cada 100 lotes (iterações) mostra a perda
         if batch % 100 == 0:
             loss, current = loss.item(), batch * len(X)
+            writer.add_scalar("Loss/train", loss, epoch)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 def test(dataloader, model, loss_fn):
@@ -124,7 +129,7 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
     
     for t in range(num_epochs):
         print(f"Epoch {t+1}\n-------------------------------")
-        train(data.train_dataloader, model, loss_fn, optimizer)
+        train(data.train_dataloader, model, loss_fn, optimizer, t)
         test(data.test_dataloader, model, loss_fn)
     print("Done!")
     
@@ -136,6 +141,7 @@ def main():
     
     parser.add_argument('-n',  '--network', type=str, choices=['LENET5', 'ALEXNET', 'VGG16'],  required=True, help='LENET5, ALEXNET or VGG16')
     parser.add_argument('-d',  '--dataset', type=str, choices=['FASHIONMNIST', 'CIFAR10'], required=True, help='FASHIONMNIST or CIFAR10')
+    parser.add_argument('-e',  '--epochs', type=int, default=5, required=False, help='Number of epochs. Default = 5')
     
     args = parser.parse_args()
     
@@ -144,9 +150,12 @@ def main():
     
     print("DataSet: ", dataset.name)
     print("Network: ", network.name)
+    print("Épocas: ", args.epochs)
     
     model = model_train(network=network.value, dataset=dataset.value, batch_size=batch_size, learning_rate=learning_rate, num_epochs=num_epochs)
-    torch.save(model.state_dict(), "{}_{}_model_weights.pth".format(dataset.name, network.name))
+    writer.flush()
+    writer.close()
+    torch.save(model.state_dict(), "models/{}_{}.pth".format(dataset.name, network.name))
 
 if __name__ == "__main__":
     main()
