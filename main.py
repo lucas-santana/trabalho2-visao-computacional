@@ -1,3 +1,4 @@
+import argparse
 import os
 import torch
 from torch import nn
@@ -131,8 +132,15 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
     return model
 
 def main():
-    dataset = DataSetType.FASHIONMNIST
-    network = Networks.LENET5
+    parser = argparse.ArgumentParser(description='Training on datasets using networks from scratch')
+    
+    parser.add_argument('-n',  '--network', type=str, choices=['LENET5', 'ALEXNET', 'VGG16'],  required=True, help='LENET5, ALEXNET or VGG16')
+    parser.add_argument('-d',  '--dataset', type=str, choices=['FASHIONMNIST', 'CIFAR10'], required=True, help='FASHIONMNIST or CIFAR10')
+    
+    args = parser.parse_args()
+    
+    dataset = DataSetType[args.dataset]
+    network = Networks[args.network]
     
     print("DataSet: ", dataset.name)
     print("Network: ", network.name)
