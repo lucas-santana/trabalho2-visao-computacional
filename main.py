@@ -19,7 +19,7 @@ from networks.LeNet5 import LeNet5
 from networks.AlexNet import AlexNet
 from networks.VGG16 import VGG16
 
-from plot import plot_loss
+from plot import plot_loss, plot_acc
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
@@ -29,10 +29,13 @@ writer = SummaryWriter()
 """
     https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-lenet5-cifar10.ipynb
     https://github.com/gradient-ai/LeNet5-Tutorial
+    https://colab.research.google.com/drive/1J7ViHL4eF_Ib6QAc_9yW82je0iyf8Hca?usp=sharing#scrollTo=iAxXEEyNcdw8
 """
     
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
-    last_loss = 0.
+    running_loss=0
+    correct=0
+    total=0
     
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
@@ -56,19 +59,30 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         optimizer.zero_grad() # Limpa os gradientes
         loss.backward() # Estima os gradientes
         optimizer.step() # Atualiza os pesos da rede
-        
-        last_loss = loss
+
+        running_loss += loss.item()
+        _ , predicted = pred.max(1)
+        total += y.size(0)
+        correct += predicted.eq(y).sum().item()
         
         if step % 100 == 0:
             
             loss, current = loss.item(), step * len(X)
             
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
-        
-    return last_loss
+    
+    train_loss = running_loss/len(dataloader)
+    accu=100. * correct/total
+    
+    return train_loss, accu
             
 
-def test_loop(dataloader, model, loss_fn):
+def test_loop(dataloader, model, loss_fn, epoch):
+
+    running_loss = 0
+    correct = 0
+    total = 0
+
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
 
@@ -95,14 +109,25 @@ def test_loop(dataloader, model, loss_fn):
             pred = model(X)
 
             # Calcula a perda
-            test_loss += loss_fn(pred, y).item()
+            test_loss += loss_fn(pred, y)
+            running_loss += test_loss.item()
+
+            _ , predicted = pred.max(1)
+            total += y.size(0)
+            correct += predicted.eq(y).sum().item()
+
             # Verifica se a predição foi correta
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+    
+    
     # Determina a perda média e a proporção de acertos
     test_loss /= num_batches
-    correct /= size
+    test_acc = 100.*correct/total
+
     # LOG: mostra a acurácia e a perda
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    print(f"Test Error: \n Accuracy: {(test_acc):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+
+    return test_loss, test_acc
 
 def build_data(network, dataset, batch_size):
     if network == Networks.LENET5.value:
@@ -135,17 +160,24 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = weight_decay, momentum = momentum)
     
-    losses = []
+    train_losses = []
+    train_accuracies = []
+    eval_losses=[]
+    eval_accu=[]
+
     for epoch in range(num_epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
         
-        loss = train_loop(data.train_dataloader, model, loss_fn, optimizer, epoch)
-        losses.append(loss.item())
-        
-    test_loop(data.test_dataloader, model, loss_fn)
-    print("Done!")
-    print(losses)
-    plot_loss(losses)
+        train_loss, train_acc = train_loop(data.train_dataloader, model, loss_fn, optimizer, epoch)
+        train_losses.append(train_loss)
+        train_accuracies.append(train_acc)
+
+        test_loss, train_acc = test_loop(data.test_dataloader, model, loss_fn, epoch)
+        eval_losses.append(test_loss)
+        eval_accu.append(train_acc)
+
+    plot_acc(train_accuracies, eval_accu)
+    plot_loss(train_losses, eval_losses)
     
     
     return model
