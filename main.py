@@ -12,9 +12,9 @@ from NetworksEnum import Networks
 from DatasetTypeEnum import DataSetType
 
 from NeuralNetwork import NeuralNetwork
-from LeNet5 import LeNet5
-from AlexNet import AlexNet
-from VGG16 import VGG16
+from models.LeNet5 import LeNet5
+from models.AlexNet import AlexNet
+from models.VGG16 import VGG16
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -89,20 +89,34 @@ def test(dataloader, model, loss_fn):
     correct /= size
     # LOG: mostra a acurácia e a perda
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-     
-def model_train(network, dataset, batch_size, learning_rate, num_epochs):
-    
+
+def build_data(network, dataset, batch_size):
     if network == Networks.LENET5.value:
         data = DataSet(dataset, batch_size=batch_size, input_size=32)
-        model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     elif network == Networks.ALEXNET.value:
         data = DataSet(dataset, batch_size=batch_size, input_size=227)
-        model = AlexNet(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     elif network == Networks.VGG16.value:
         data = DataSet(dataset, batch_size=batch_size, input_size=224)
+    else:
+        raise Exception("Network not supported: ", network)
+    
+    return data
+
+def model_train(network, dataset, batch_size, learning_rate, num_epochs):
+    
+    data = build_data(network, dataset, batch_size=batch_size)
+    
+    if network == Networks.LENET5.value:
+        model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    elif network == Networks.ALEXNET.value:
+        model = AlexNet(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    elif network == Networks.VGG16.value:
         model = VGG16(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     else:
         raise Exception("Network not supported: ", network)
+    
+    print(f"Model structure: {model}\n\n")
+
     
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = weight_decay, momentum = momentum)
@@ -113,16 +127,18 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
         test(data.test_dataloader, model, loss_fn)
     print("Done!")
     
+    
     return model
 
 def main():
     dataset = DataSetType.FASHIONMNIST
-    network = Networks.ALEXNET
+    network = Networks.LENET5
     
     print("DataSet: ", dataset.name)
     print("Network: ", network.name)
     
-    model_train(network=network.value, dataset=dataset.value, batch_size=batch_size, learning_rate=learning_rate, num_epochs=num_epochs)
+    model = model_train(network=network.value, dataset=dataset.value, batch_size=batch_size, learning_rate=learning_rate, num_epochs=num_epochs)
+    torch.save(model.state_dict(), "{}_{}_model_weights.pth".format(dataset.name, network.name))
 
 if __name__ == "__main__":
     main()

@@ -13,7 +13,7 @@ class AlexNet(nn.Module):
             in_channels = 3
 
         self.layer1 = nn.Sequential(
-            nn.Conv2d(3*in_channels, 96*in_channels, kernel_size=11, stride=4, padding=0),
+            nn.Conv2d(1*in_channels, 96*in_channels, kernel_size=11, stride=4, padding=0),
             nn.BatchNorm2d(96*in_channels),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size = 3, stride = 2))
@@ -53,7 +53,6 @@ class AlexNet(nn.Module):
             nn.Linear(4096*in_channels, num_classes))
         
     def forward(self, x):
-        print("SHAPE ", x.shape)
         out = self.layer1(x)
         out = self.layer2(out)
         out = self.layer3(out)
