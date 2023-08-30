@@ -1,6 +1,8 @@
 import argparse
 import os
 import torch
+import numpy as np
+
 from torch import nn
 from torch.utils.tensorboard import SummaryWriter
 
@@ -25,10 +27,12 @@ print(f"Using {device} device")
 
 writer = SummaryWriter()
 
+torch.manual_seed(7)
 """
     https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-lenet5-cifar10.ipynb
     https://github.com/gradient-ai/LeNet5-Tutorial
     https://colab.research.google.com/drive/1J7ViHL4eF_Ib6QAc_9yW82je0iyf8Hca?usp=sharing#scrollTo=iAxXEEyNcdw8
+    https://nvsyashwanth.github.io/machinelearningmaster/cifar-10/
 """
     
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
@@ -39,6 +43,9 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
     
+    # Obtém o número de lotes (iterações)   
+    num_batches = len(dataloader)
+        
     # Set the model to training mode - important for batch normalization and dropout layers
     # Unnecessary in this situation but added for best practices
     model.train()
@@ -60,7 +67,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         optimizer.step() # Atualiza os pesos da rede
 
         running_loss += loss.item()
-        
+                 
         _ , predicted = pred.max(1)
         total += y.size(0)
         correct += predicted.eq(y).sum().item()
@@ -70,13 +77,45 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
             loss, current = loss.item(), step * len(X)
             
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
-    
-    train_loss = running_loss/len(dataloader)
+               
+    train_loss = running_loss/num_batches
     accu = 100. * correct/total
     
     print('Train Loss: %.3f | Accuracy: %.3f'%(train_loss, accu))
     return train_loss, accu
+
+def validation_loop(dataloader, model, loss_fn, epoch):
+    valid_loss = 0.0
+    correct = 0
+    total = 0
+
+    # Obtém o tamanho do dataset
+    size = len(dataloader.dataset)
+
+    # Obtém o número de lotes (iterações)
+    num_batches = len(dataloader)
+    
+    model.eval()
+    with torch.no_grad():
+        
+        for X, y in dataloader:
             
+            X, y = X.to(device), y.to(device)
+
+            output = model(X)
+
+            valid_loss += loss_fn(output, y).item()
+
+            _ , predicted = output.max(1)
+            total += y.size(0)
+            correct += predicted.eq(y).sum().item()
+    
+    valid_loss = valid_loss/num_batches
+    accu = 100.*(correct/size)
+
+    print('Valid Loss: %.3f | Accuracy: %.3f'%(valid_loss, accu)) 
+
+    return valid_loss, accu      
 
 def test_loop(dataloader, model, loss_fn, epoch):
 
@@ -116,8 +155,7 @@ def test_loop(dataloader, model, loss_fn, epoch):
 
     # test_loss divide pelo n de batches ou tam do dataset
     
-    test_loss = running_loss/num_batches # tutorial luiz
-    # test_loss = running_loss/size # tutorial google
+    test_loss = running_loss/num_batches
     accu = 100.*(correct/size)
 
     # LOG: mostra a acurácia e a perda
@@ -154,13 +192,19 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
 
     
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, weight_decay = weight_decay, momentum = momentum)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     
     train_losses = []
     train_accuracies = []
-    eval_losses=[]
-    eval_accu=[]
+    
+    val_losses = []
+    val_accuracies = []
+    
+    
+    test_losses = []
+    test_accuracies = []
 
+    valid_loss_min = np.Inf
     for epoch in range(num_epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
         
@@ -168,15 +212,23 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
         train_losses.append(train_loss)
         train_accuracies.append(train_acc)
 
-        test_loss, train_acc = test_loop(data.test_dataloader, model, loss_fn, epoch)
-        eval_losses.append(test_loss)
-        eval_accu.append(train_acc)
-
-    plot_acc(train_accuracies, eval_accu)
-    plot_loss(train_losses, eval_losses)
+        # test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, epoch)
+        # test_losses.append(test_loss)
+        # test_accuracies.append(test_acc)
+        
+        valid_loss, valid_acc = validation_loop(data.valid_dataloader, model, loss_fn, epoch)
+        val_losses.append(valid_loss)
+        val_accuracies.append(valid_acc)
+        
+        if valid_loss <= valid_loss_min:
+            print(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
+            torch.save(model.state_dict(), "models/{}_{}.pth".format(data.dataset_name, type(model).__name__))
+            valid_loss_min = valid_loss
+             
+    plot_acc(train_accuracies, val_accuracies)
+    plot_loss(train_losses, val_losses)
     plot_confusion_matrix(model, data.test_dataloader )
-    
-    
+
     return model
 
 def main():
@@ -199,7 +251,7 @@ def main():
     model = model_train(network=network.value, dataset=dataset.value, batch_size=batch_size, learning_rate=learning_rate, num_epochs=num_epochs)
     writer.flush()
     writer.close()
-    torch.save(model.state_dict(), "models/{}_{}.pth".format(dataset.name, network.name))
+    # torch.save(model.state_dict(), "models/{}_{}.pth".format(dataset.name, network.name))
 
 if __name__ == "__main__":
     main()
