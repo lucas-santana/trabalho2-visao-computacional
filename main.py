@@ -2,7 +2,6 @@ import argparse
 import os
 import torch
 from torch import nn
-from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from torchvision import datasets, transforms
@@ -19,7 +18,7 @@ from networks.LeNet5 import LeNet5
 from networks.AlexNet import AlexNet
 from networks.VGG16 import VGG16
 
-from plot import plot_loss, plot_acc
+from plot import plot_loss, plot_acc, plot_confusion_matrix
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
@@ -33,9 +32,9 @@ writer = SummaryWriter()
 """
     
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
-    running_loss=0
-    correct=0
-    total=0
+    running_loss = 0.
+    correct = 0
+    total = 0
     
     # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
@@ -43,7 +42,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     # Set the model to training mode - important for batch normalization and dropout layers
     # Unnecessary in this situation but added for best practices
     model.train()
-    
+
     # Itera sobre os lotes
     for step, (X, y) in enumerate(dataloader):
         
@@ -61,6 +60,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         optimizer.step() # Atualiza os pesos da rede
 
         running_loss += loss.item()
+        
         _ , predicted = pred.max(1)
         total += y.size(0)
         correct += predicted.eq(y).sum().item()
@@ -72,8 +72,9 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
     
     train_loss = running_loss/len(dataloader)
-    accu=100. * correct/total
+    accu = 100. * correct/total
     
+    print('Train Loss: %.3f | Accuracy: %.3f'%(train_loss, accu))
     return train_loss, accu
             
 
@@ -83,7 +84,7 @@ def test_loop(dataloader, model, loss_fn, epoch):
     correct = 0
     total = 0
 
-    # Obtém o tamanho do dataset
+   # Obtém o tamanho do dataset
     size = len(dataloader.dataset)
 
     # Obtém o número de lotes (iterações)
@@ -92,42 +93,37 @@ def test_loop(dataloader, model, loss_fn, epoch):
     # Set the model to evaluation mode - important for batch normalization and dropout layers
     # Unnecessary in this situation but added for best practices   
     model.eval() # Indica que o modelo está em processo de teste 
-
-    # Inicializa a perda de teste e a quantidade de acertos com 0
-    test_loss, correct = 0, 0
-
     
     # Evaluating the model with torch.no_grad() ensures that no gradients are computed during test mode
     # also serves to reduce unnecessary gradient computations and memory usage for tensors with requires_grad=True
     # Desabilita o cálculo do gradiente
     with torch.no_grad():
         # Itera sobre o conjunto de teste
+        count = 0
         for X, y in dataloader:
+            count += 1
             # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
             X, y = X.to(device), y.to(device)
             # Realiza a predição
             pred = model(X)
 
             # Calcula a perda
-            test_loss += loss_fn(pred, y)
-            running_loss += test_loss.item()
+            running_loss += loss_fn(pred, y).item()
 
             _ , predicted = pred.max(1)
             total += y.size(0)
             correct += predicted.eq(y).sum().item()
 
-            # Verifica se a predição foi correta
-            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+    # test_loss divide pelo n de batches ou tam do dataset
     
-    
-    # Determina a perda média e a proporção de acertos
-    test_loss /= num_batches
-    test_acc = 100.*correct/total
+    test_loss = running_loss/num_batches # tutorial luiz
+    # test_loss = running_loss/size # tutorial google
+    accu = 100.*(correct/size)
 
     # LOG: mostra a acurácia e a perda
-    print(f"Test Error: \n Accuracy: {(test_acc):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    print('Test Loss: %.3f | Accuracy: %.3f'%(test_loss, accu)) 
 
-    return test_loss, test_acc
+    return test_loss, accu
 
 def build_data(network, dataset, batch_size):
     if network == Networks.LENET5.value:
@@ -178,6 +174,7 @@ def model_train(network, dataset, batch_size, learning_rate, num_epochs):
 
     plot_acc(train_accuracies, eval_accu)
     plot_loss(train_losses, eval_losses)
+    plot_confusion_matrix(model, data.test_dataloader )
     
     
     return model

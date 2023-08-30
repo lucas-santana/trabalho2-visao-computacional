@@ -7,9 +7,11 @@ class DataSet():
         
         self.dataset_type = dataset_type
         
+        
+        
         """
-                - The output of torchvision datasets are PILImage images of range [0, 1]. 
-                - We transform them to Tensors of normalized range [-1, 1].
+            - The output of torchvision datasets are PILImage images of range [0, 1]. 
+            - We transform them to Tensors of normalized range [-1, 1].
         """
         transform = transforms.Compose([
                                         transforms.Resize((input_size, input_size)),
@@ -23,6 +25,7 @@ class DataSet():
             """
             self.gray_scale = True
             self.num_classes = 10
+            self.classes = ('T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot')
 
             self.training_data = datasets.FashionMNIST(
                         root="data",

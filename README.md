@@ -3,7 +3,7 @@
 # Criação do ambiente
 
 CPU
--  conda create -n trab2_visao -c pytorch pytorch torchvision torchaudio cpuonly numpy matplotlib tensorboard
+-  conda create -n trab2_visao -c pytorch pytorch torchvision torchaudio cpuonly numpy matplotlib tensorboard scikit-learn seaborn
 
 GPU
 
