@@ -235,9 +235,9 @@ def model_train(experiment_id):
         train_losses.append(train_loss)
         train_accuracies.append(train_acc)
 
-        # test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, epoch)
-        # test_losses.append(test_loss)
-        # test_accuracies.append(test_acc)
+        test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, epoch)
+        test_losses.append(test_loss)
+        test_accuracies.append(test_acc)
         
         valid_loss, valid_acc = validation_loop(data.valid_dataloader, model, loss_fn, epoch)
         val_losses.append(valid_loss)
@@ -250,28 +250,23 @@ def model_train(experiment_id):
     
     torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/{data.dataset_name}_{type(best_model).__name__}.pth")         
     
-    test_loss, test_acc = test_loop(data.test_dataloader, best_model, loss_fn, epoch)
+    # test_loss, test_acc = test_loop(data.test_dataloader, best_model, loss_fn, epoch)
+     
+    # dataframes das acurácias
+    tab_acc = {"train_acc": train_accuracies,
+               "val_acc": val_accuracies,
+               "test_acc": test_accuracies}
     
+    tab_loss = {"train_loss": train_losses,
+               "val_loss": val_losses,
+               "test_loss": test_losses}
     
-    # with open(f'results/experiment_{experiment_id}/test_acc.ob', 'wb') as fp:
-    #     pickle.dump(test_acc, fp)
-    
-    # with open (f'results/experiment_{experiment_id}/test_acc.ob', 'rb') as fp:
-    #     list_1 = pickle.load(fp)
-    
-    # dataframe dos resultados de acurácia
-    tab_acc = {"train_acc_max": train_accuracies,
-               "val_acc_max": val_accuracies,
-               "test_acc": test_acc}
     
     df_acc = pd.DataFrame(tab_acc)
-    df_acc.to_csv(f'results/experiment_{experiment_id}/acc.csv')
+    df_acc.to_csv(f'results/experiment_{experiment_id}/acc.csv', index=False, float_format='%.2f')
     
-    train_accuracies_np = np.array([train_accuracies])
-    np.savetxt(f'results/experiment_{experiment_id}/train_accuracies.txt', train_accuracies_np)
-    train_accuracies_np_loaded = np.loadtxt(f'results/experiment_{experiment_id}/train_accuracies.txt')
-    print("Original: ", train_accuracies_np)    
-    print("Salvo: ", train_accuracies_np_loaded)
+    df_loss = pd.DataFrame(tab_loss)
+    df_loss.to_csv(f'results/experiment_{experiment_id}/loss.csv', index=False, float_format='%.2f')
 
     plot_acc(experiment_id, train_accuracies, val_accuracies)
     plot_loss(experiment_id, train_losses, val_losses)

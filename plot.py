@@ -5,6 +5,7 @@ import torch
 import seaborn as sn
 import pandas as pd
 import numpy as np
+import pandas as pd
 
 from torchvision.utils import make_grid
 from sklearn.metrics import confusion_matrix
@@ -48,6 +49,11 @@ def plot_confusion_matrix(experiment_id, model, dataloader):
         _, preds = torch.max(outputs, 1)
         y_pred.extend(preds.cpu().numpy())
         y_true.extend(labels.cpu().numpy())
+
+    predictions = np.array([y_pred, y_true])
+
+    df_pred = pd.DataFrame(pred)
+    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False, float_format='%.2f')
 
     # constant for classes
     classes = ('T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot')
