@@ -1,9 +1,3 @@
-"""
-    DÚVIDAS
-    - a loss deve ser calculada pelo número de batches ou pelo tamanho do
-"""
-
-import pickle
 import gc
 import torch
 import numpy as np
@@ -248,7 +242,8 @@ def model_train(experiment_id):
             valid_loss_min = valid_loss
             best_model = model
     
-    torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/{data.dataset_name}_{type(best_model).__name__}.pth")         
+    # torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/{data.dataset_name}_{type(best_model).__name__}.pth")         
+    torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")         
     
     # test_loss, test_acc = test_loop(data.test_dataloader, best_model, loss_fn, epoch)
      
@@ -274,7 +269,7 @@ def model_train(experiment_id):
 
     return model
 
-def model_evaluate(experiment_id):
+def model_eval(experiment_id):
     parameters = parse_exp_json(experiment_id)
     
     network = Networks[parameters['network']].value
@@ -296,4 +291,8 @@ def model_evaluate(experiment_id):
     else:
         raise Exception("Network not supported: ", network)
     
+    model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
+    model.eval()
+
+    plot_confusion_matrix(experiment_id, model, data.test_dataloader )
     print(f"Model structure: {model}\n\n")

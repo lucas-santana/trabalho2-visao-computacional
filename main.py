@@ -4,7 +4,7 @@ import logging
 
 from torch.utils.tensorboard import SummaryWriter
 
-from run import model_train
+from run import model_train, model_eval
 from DatasetTypeEnum import DataSetType
 from NetworksEnum import Networks
 
@@ -32,7 +32,10 @@ def main():
    
         make_experiment_folder(args.experiment_id)
 
-        model_train(args.experiment_id)
+        # model_train(args.experiment_id)
+
+        model_eval(args.experiment_id)
+
 
     else:
         logging.error(f"Erro! Experimento {args.experiment_id} não existe")
