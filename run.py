@@ -273,3 +273,27 @@ def model_train(experiment_id):
     plot_confusion_matrix(experiment_id, best_model, data.test_dataloader )
 
     return model
+
+def model_evaluate(experiment_id):
+    parameters = parse_exp_json(experiment_id)
+    
+    network = Networks[parameters['network']].value
+    dataset = DataSetType[parameters['dataset']].value
+    batch_size = parameters['batch_size']
+    learning_rate = parameters['learning_rate']
+    num_epochs = parameters['epochs']
+    
+    data = build_data(network, dataset, batch_size = batch_size)
+    
+    plot_samples(experiment_id, data.train_dataloader)
+    
+    if network == Networks.LENET5.value:
+        model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    elif network == Networks.ALEXNET.value:
+        model = AlexNet(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    elif network == Networks.VGG16.value:
+        model = VGG16(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
+    else:
+        raise Exception("Network not supported: ", network)
+    
+    print(f"Model structure: {model}\n\n")
