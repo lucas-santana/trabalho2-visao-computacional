@@ -52,8 +52,12 @@ def plot_confusion_matrix(experiment_id, model, dataloader):
 
     predictions = np.array([y_pred, y_true])
 
-    df_pred = pd.DataFrame(pred)
-    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False, float_format='%.2f')
+    tab_pred = {"target": y_true,
+               "prediction": y_pred
+            }
+
+    df_pred = pd.DataFrame(tab_pred)
+    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
 
     # constant for classes
     classes = ('T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot')
