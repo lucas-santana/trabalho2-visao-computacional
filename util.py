@@ -1,5 +1,6 @@
 import os
 import json
+from pathlib import Path
 
 def make_experiment_folder(exp_id):
     """Cria a pasta de experimento caso não exista
@@ -9,6 +10,9 @@ def make_experiment_folder(exp_id):
     """
     if not os.path.exists(f"results/experiment_{exp_id}"):
         os.makedirs(f"results/experiment_{exp_id}")
+    
+    if not os.path.exists(f"results/experiment_{exp_id}/model"):
+        os.makedirs(f"results/experiment_{exp_id}/model")
 
 def parse_exp_json(exp_id):
     
@@ -26,4 +30,10 @@ def parse_exp_json(exp_id):
     
     
     return data
+
+def check_exp_exist(exp_id):
+    filename = f'experiments/exp_{exp_id}.json'
+    my_file = Path(filename)
+    if my_file.is_file():
+        return True
     

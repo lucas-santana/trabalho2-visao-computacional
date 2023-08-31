@@ -3,10 +3,16 @@
     - a loss deve ser calculada pelo número de batches ou pelo tamanho do
 """
 
+import pickle
+import gc
 import torch
 import numpy as np
+import pandas as pd
+import time
+
 
 from torch import nn
+# torch.set_flush_denormal(True)
 
 
 from torchvision import datasets, transforms
@@ -22,7 +28,7 @@ from networks.LeNet5 import LeNet5
 from networks.AlexNet import AlexNet
 from networks.VGG16 import VGG16
 
-from plot import plot_loss, plot_acc, plot_confusion_matrix
+from plot import plot_loss, plot_acc, plot_confusion_matrix, plot_samples
 
 from util import make_experiment_folder, parse_exp_json
 
@@ -54,6 +60,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
 
     # Itera sobre os lotes
     for step, (X, y) in enumerate(dataloader):
+        tic = time.perf_counter()
         
         # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
         X, y = X.to(device), y.to(device)
@@ -64,7 +71,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         loss = loss_fn(pred, y)  # Estima o valor da função de perda
     
         # Backpropagation
-        optimizer.zero_grad() # Limpa os gradientes
+        optimizer.zero_grad(set_to_none=True) # Limpa os gradientes
         loss.backward() # Estima os gradientes
         optimizer.step() # Atualiza os pesos da rede
 
@@ -79,6 +86,12 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
             loss, current = loss.item(), step * len(X)
             
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+        
+        toc = time.perf_counter()
+        gc.collect()
+        del pred, loss, X, y
+        
+        # print(f"epoch {epoch} {step} took {toc-tic:.2f} seconds")
                
     train_loss = running_loss/num_batches
     accu = 100. * correct/total
@@ -119,7 +132,7 @@ def validation_loop(dataloader, model, loss_fn, epoch):
 
     return valid_loss, accu      
 
-def test_loop(dataloader, model, loss_fn, epoch):
+def test_loop(dataloader, model, loss_fn, epoch=None):
 
     running_loss = 0
     correct = 0
@@ -186,6 +199,8 @@ def model_train(experiment_id):
     
     data = build_data(network, dataset, batch_size = batch_size)
     
+    plot_samples(experiment_id, data.train_dataloader)
+    
     if network == Networks.LENET5.value:
         model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     elif network == Networks.ALEXNET.value:
@@ -212,6 +227,7 @@ def model_train(experiment_id):
     test_accuracies = []
 
     valid_loss_min = np.Inf
+    best_model = model
     for epoch in range(num_epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
         
@@ -229,11 +245,36 @@ def model_train(experiment_id):
         
         if valid_loss <= valid_loss_min:
             print(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
-            torch.save(model.state_dict(), "models/{}_{}.pth".format(data.dataset_name, type(model).__name__))
             valid_loss_min = valid_loss
-             
-    plot_acc(train_accuracies, val_accuracies)
-    plot_loss(train_losses, val_losses)
-    plot_confusion_matrix(model, data.test_dataloader )
+            best_model = model
+    
+    torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/{data.dataset_name}_{type(best_model).__name__}.pth")         
+    
+    test_loss, test_acc = test_loop(data.test_dataloader, best_model, loss_fn, epoch)
+    
+    
+    # with open(f'results/experiment_{experiment_id}/test_acc.ob', 'wb') as fp:
+    #     pickle.dump(test_acc, fp)
+    
+    # with open (f'results/experiment_{experiment_id}/test_acc.ob', 'rb') as fp:
+    #     list_1 = pickle.load(fp)
+    
+    # dataframe dos resultados de acurácia
+    tab_acc = {"train_acc_max": train_accuracies,
+               "val_acc_max": val_accuracies,
+               "test_acc": test_acc}
+    
+    df_acc = pd.DataFrame(tab_acc)
+    df_acc.to_csv(f'results/experiment_{experiment_id}/acc.csv')
+    
+    train_accuracies_np = np.array([train_accuracies])
+    np.savetxt(f'results/experiment_{experiment_id}/train_accuracies.txt', train_accuracies_np)
+    train_accuracies_np_loaded = np.loadtxt(f'results/experiment_{experiment_id}/train_accuracies.txt')
+    print("Original: ", train_accuracies_np)    
+    print("Salvo: ", train_accuracies_np_loaded)
+
+    plot_acc(experiment_id, train_accuracies, val_accuracies)
+    plot_loss(experiment_id, train_losses, val_losses)
+    plot_confusion_matrix(experiment_id, best_model, data.test_dataloader )
 
     return model

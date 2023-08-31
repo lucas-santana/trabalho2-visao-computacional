@@ -1,12 +1,15 @@
 
 import matplotlib.pyplot as plt
 import torch
-from sklearn.metrics import confusion_matrix
+
 import seaborn as sn
 import pandas as pd
 import numpy as np
 
-def plot_acc(train_accu, eval_accu):
+from torchvision.utils import make_grid
+from sklearn.metrics import confusion_matrix
+
+def plot_acc(experiment_id, train_accu, eval_accu, title="Train vs Test Accuracy"):
     f = plt.figure() # gera uma figura do gr ́afico (antes de desenh ́a-lo)
 
     plt.plot(train_accu,'-o')
@@ -14,13 +17,13 @@ def plot_acc(train_accu, eval_accu):
     plt.xlabel('epoch')
     plt.ylabel('accuracy')
     plt.legend(['Train','Test'])
-    plt.title('Train vs Test Accuracy')
+    plt.title(title)
 
     # plt.show()
     
-    f.savefig('results/acc.pdf')
+    f.savefig(f'results/experiment_{experiment_id}/acc.pdf')
     
-def plot_loss(train_losses, eval_losses):
+def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Losses"):
     f = plt.figure() # gera uma figura do gr ́afico (antes de desenh ́a-lo)
 
     plt.plot(train_losses,'-o')
@@ -28,13 +31,13 @@ def plot_loss(train_losses, eval_losses):
     plt.xlabel('epoch')
     plt.ylabel('losses')
     plt.legend(['Train','Test'])
-    plt.title('Train vs Test Losses')
+    plt.title(title)
 
     # plt.show()
     
-    f.savefig('results/loss.pdf')
+    f.savefig(f'results/experiment_{experiment_id}/loss.pdf')
     
-def plot_confusion_matrix(model, dataloader):
+def plot_confusion_matrix(experiment_id, model, dataloader):
     y_pred = []
     y_true = []
 
@@ -55,7 +58,7 @@ def plot_confusion_matrix(model, dataloader):
     # Create pandas dataframe
     df_cm = pd.DataFrame(cf_matrix, index=classes, columns=classes)
     
-    df_cm.to_csv('results/df_cm.csv')
+    df_cm.to_csv(f'results/experiment_{experiment_id}/df_cm.csv')
     
     plt.figure(figsize = (12, 7))
     sn.heatmap(df_cm, annot=True, cbar=None, cmap="OrRd",fmt="d")
@@ -65,4 +68,13 @@ def plot_confusion_matrix(model, dataloader):
     plt.ylabel("True Class"), 
     plt.xlabel("Predicted Class")
     
-    plt.savefig('results/cm.pdf')
+    plt.savefig(f'results/experiment_{experiment_id}/cm.pdf')
+
+def plot_samples(experiment_id, dataloader):
+    for images, _ in dataloader:
+        print('images.shape:', images.shape)
+        f = plt.figure(figsize=(16,8))
+        plt.axis('off')
+        plt.imshow(make_grid(images, nrow=16).permute((1, 2, 0)))
+        f.savefig(f'results/experiment_{experiment_id}/image_grid.png')
+        break
