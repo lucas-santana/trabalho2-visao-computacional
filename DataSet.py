@@ -52,6 +52,13 @@ class DataSet():
             self.gray_scale = False # 32x32x3
             self.dataset_name = 'CIFAR10'
             
+            transform = transforms.Compose([
+                                        transforms.ToTensor(),
+                                        transforms.Normalize(
+                                            (0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616)
+                                        )
+                                    ])
+            
             self.training_data = datasets.CIFAR10(
                         root="data",
                         train=True,
@@ -77,7 +84,7 @@ class DataSet():
         self.training_data, self.valid_data = random_split(self.training_data, [train_size, valid_size])
         
         self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True)
-        self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=False)
+        self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True)
         self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=False)
         
         for images, _ in self.train_dataloader:

@@ -1,3 +1,8 @@
+"""
+    DÚVIDAS
+    - a loss deve ser calculada pelo número de batches ou pelo tamanho do
+"""
+
 import argparse
 import os
 import torch
@@ -33,6 +38,8 @@ torch.manual_seed(7)
     https://github.com/gradient-ai/LeNet5-Tutorial
     https://colab.research.google.com/drive/1J7ViHL4eF_Ib6QAc_9yW82je0iyf8Hca?usp=sharing#scrollTo=iAxXEEyNcdw8
     https://nvsyashwanth.github.io/machinelearningmaster/cifar-10/
+    https://www.youtube.com/watch?v=gbrHEsbTdF0
+    https://www.youtube.com/watch?v=doT7koXt9vw
 """
     
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
@@ -66,11 +73,11 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         loss.backward() # Estima os gradientes
         optimizer.step() # Atualiza os pesos da rede
 
+        # loss é um tensor de 1 valor, por isso o item()
         running_loss += loss.item()
-                 
-        _ , predicted = pred.max(1)
+
         total += y.size(0)
-        correct += predicted.eq(y).sum().item()
+        correct += (pred.argmax(1) == y).type(torch.float).sum().item()
         
         if step % 100 == 0:
             
@@ -106,9 +113,9 @@ def validation_loop(dataloader, model, loss_fn, epoch):
 
             valid_loss += loss_fn(output, y).item()
 
-            _ , predicted = output.max(1)
+            
             total += y.size(0)
-            correct += predicted.eq(y).sum().item()
+            correct += (output.argmax(1) == y).type(torch.float).sum().item()
     
     valid_loss = valid_loss/num_batches
     accu = 100.*(correct/size)
@@ -138,9 +145,7 @@ def test_loop(dataloader, model, loss_fn, epoch):
     # Desabilita o cálculo do gradiente
     with torch.no_grad():
         # Itera sobre o conjunto de teste
-        count = 0
         for X, y in dataloader:
-            count += 1
             # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
             X, y = X.to(device), y.to(device)
             # Realiza a predição
@@ -149,9 +154,8 @@ def test_loop(dataloader, model, loss_fn, epoch):
             # Calcula a perda
             running_loss += loss_fn(pred, y).item()
 
-            _ , predicted = pred.max(1)
             total += y.size(0)
-            correct += predicted.eq(y).sum().item()
+            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
     # test_loss divide pelo n de batches ou tam do dataset
     
