@@ -1,8 +1,0 @@
-{
-    "network": "LENET5",
-    "dataset": "CIFAR10",
-    "epochs": 10,
-    "batch_size": 32,
-    "learning_rate": 0.001,
-    "num_workers": 1
-}
