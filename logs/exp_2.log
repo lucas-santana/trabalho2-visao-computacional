@@ -146,3 +146,8 @@
 2023-09-01 13:53:10,405 - root - INFO - Construindo dataset para a rede LENET5
 2023-09-01 13:53:14,675 - root - INFO - Testando época 0
 2023-09-01 13:53:16,920 - root - INFO - Validando época 0
+2023-09-01 15:31:53,104 - root - INFO - --------------------- Iniciando Teste 2 ---------------------
+2023-09-01 15:31:53,104 - root - INFO - Rodando evaluation
+2023-09-01 15:31:53,104 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-01 15:31:56,815 - root - INFO - Testando época 0
+2023-09-01 15:31:58,654 - root - INFO - Validando época 0
