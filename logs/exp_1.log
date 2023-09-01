@@ -141,3 +141,18 @@
               1158.5171670354903,
               1187.923757133074,
               1267.0710399188101]}
+2023-09-01 12:43:38,369 - root - INFO - --------------------- Iniciando Experimento 1 ---------------------
+2023-09-01 12:43:38,369 - root - INFO - Rodando evaluation
+2023-09-01 12:43:38,370 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-01 12:47:59,512 - root - INFO - --------------------- Iniciando Experimento 1 ---------------------
+2023-09-01 12:47:59,512 - root - INFO - Rodando evaluation
+2023-09-01 12:47:59,512 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-01 12:51:42,931 - root - INFO - --------------------- Iniciando Experimento 1 ---------------------
+2023-09-01 12:51:42,932 - root - INFO - Rodando evaluation
+2023-09-01 12:51:42,932 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-01 12:52:05,996 - root - INFO - --------------------- Iniciando Experimento 1 ---------------------
+2023-09-01 12:52:05,996 - root - INFO - Rodando evaluation
+2023-09-01 12:52:05,997 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-01 12:55:15,206 - root - INFO - --------------------- Iniciando Experimento 1 ---------------------
+2023-09-01 12:55:15,206 - root - INFO - Rodando evaluation
+2023-09-01 12:55:15,207 - root - INFO - Construindo dataset para a rede LENET5
