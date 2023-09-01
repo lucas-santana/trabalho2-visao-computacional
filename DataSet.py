@@ -3,7 +3,6 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from DatasetTypeEnum import DataSetType
 from torch.utils.data import random_split
-from torchvision.utils import make_grid
 import matplotlib.pyplot as plt
 
 class DataSet():
@@ -52,12 +51,12 @@ class DataSet():
             self.gray_scale = False # 32x32x3
             self.dataset_name = 'CIFAR10'
             
-            transform = transforms.Compose([
-                                        transforms.ToTensor(),
-                                        transforms.Normalize(
-                                            (0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616)
-                                        )
-                                    ])
+            # transform = transforms.Compose([
+            #                             transforms.ToTensor(),
+            #                             # transforms.Normalize(
+            #                             #     (0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616)
+            #                             # )
+            #                         ])
             
             self.training_data = datasets.CIFAR10(
                         root="data",
@@ -83,14 +82,6 @@ class DataSet():
 
         self.training_data, self.valid_data = random_split(self.training_data, [train_size, valid_size])
         
-        self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True)
-        self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True)
-        self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=False)
-        
-        for images, _ in self.train_dataloader:
-            print('images.shape:', images.shape)
-            f = plt.figure(figsize=(16,8))
-            plt.axis('off')
-            plt.imshow(make_grid(images, nrow=16).permute((1, 2, 0)))
-            f.savefig('results/image_grid.png')
-            break
+        self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=0)
+        self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=0)
+        self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=False, pin_memory=True, num_workers=0)
