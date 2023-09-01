@@ -386,3 +386,36 @@
 2023-09-01 15:55:19,599 - root - INFO - Construindo dataset para a rede LENET5
 2023-09-01 15:55:21,327 - root - INFO - Testando época 0
 2023-09-01 15:55:22,504 - root - INFO - Validando época 0
+2023-09-01 18:50:51,678 - root - INFO - --------------------- Iniciando Experimento 8 ---------------------
+2023-09-01 18:50:51,678 - root - INFO - Parametros
+2023-09-01 18:50:51,678 - root - INFO - {'batch_size': 64,
+ 'dataset': 'FASHIONMNIST',
+ 'epochs': 10,
+ 'learning_rate': 0.001,
+ 'network': 'LENET5',
+ 'num_workers': 1}
+2023-09-01 18:50:51,678 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-01 18:50:51,983 - root - INFO - Construindo modelo para a rede LENET5
+2023-09-01 18:50:51,985 - root - INFO - LeNet5(
+  (layer1): Sequential(
+    (0): Conv2d(1, 6, kernel_size=(5, 5), stride=(1, 1))
+    (1): BatchNorm2d(6, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer2): Sequential(
+    (0): Conv2d(6, 16, kernel_size=(5, 5), stride=(1, 1))
+    (1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Linear(in_features=400, out_features=120, bias=True)
+  (relu): ReLU()
+  (fc1): Linear(in_features=120, out_features=84, bias=True)
+  (relu1): ReLU()
+  (fc2): Linear(in_features=84, out_features=10, bias=True)
+)
+2023-09-01 18:50:51,985 - root - INFO - Iniciando treinamento
+2023-09-01 18:50:51,985 - root - INFO - Epoch 1
+-------------------------------
+2023-09-01 18:50:51,985 - root - INFO - Treinando época 0
