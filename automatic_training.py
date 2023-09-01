@@ -11,4 +11,4 @@ script = script_name.read()
 
 
 for exp_id in experiments_id:
-    subprocess.run(["python", "main.py", "-e", f"{exp_id}", "-t", 1])
+    subprocess.run(["python", "main.py", "-e", f"{exp_id}", "-t", "1"])
