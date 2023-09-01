@@ -251,6 +251,7 @@ def model_train(experiment_id):
     best_model = model
     
     logging.info("Iniciando treinamento")
+    start_time = time.perf_counter()
     for epoch in range(num_epochs):
         logging.info(f"Epoch {epoch+1}\n-------------------------------")
         print(f"Epoch {epoch+1}\n-------------------------------")
@@ -271,6 +272,8 @@ def model_train(experiment_id):
             print(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
             valid_loss_min = valid_loss
             best_model = model
+    end_time = time.perf_counter()
+    logging.info(f"Tempo treinamento:  {end_time-start_time:.2f} seconds")
     
     # torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/{data.dataset_name}_{type(best_model).__name__}.pth")         
     torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")         
