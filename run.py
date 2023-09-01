@@ -53,9 +53,10 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     model.train()
 
     # Itera sobre os lotes
+    tic = time.perf_counter()
     for step, (X, y) in enumerate(dataloader):
         torch.cuda.empty_cache()
-        tic = time.perf_counter()
+        
         
         # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
         X, y = X.to(device), y.to(device)
@@ -88,13 +89,14 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
             
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
         
-        toc = time.perf_counter()
+        
         
         del pred, loss, X, y
         gc.collect()
+    toc = time.perf_counter()
         
         
-        # print(f"epoch {epoch} {step} took {toc-tic:.2f} seconds")
+    print(f"epoch {epoch} took {toc-tic:.2f} seconds")
                
     train_loss = running_loss/num_batches
     accu = 100. * correct/total
@@ -193,6 +195,7 @@ def build_data(network, dataset, batch_size):
 def model_train(experiment_id):
     
     parameters = parse_exp_json(experiment_id)
+    print(parameters)
     
     network = Networks[parameters['network']].value
     dataset = DataSetType[parameters['dataset']].value
