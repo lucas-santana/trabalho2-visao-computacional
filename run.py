@@ -70,9 +70,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         optimizer.zero_grad() # Limpa os gradientes
         
         loss.backward() # Estima os gradientes
-        print("Chega: ", step)
         optimizer.step() # Atualiza os pesos da rede
-        print("Não chega: ", step)
         
         
         
@@ -96,7 +94,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         gc.collect()
         
         
-        print(f"epoch {epoch} {step} took {toc-tic:.2f} seconds")
+        # print(f"epoch {epoch} {step} took {toc-tic:.2f} seconds")
                
     train_loss = running_loss/num_batches
     accu = 100. * correct/total
