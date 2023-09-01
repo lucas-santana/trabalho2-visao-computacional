@@ -1,6 +1,7 @@
 import os
 import json
 from pathlib import Path
+import pandas as pd
 
 def make_experiment_folder(exp_id):
     """Cria a pasta de experimento caso não exista
@@ -36,4 +37,15 @@ def check_exp_exist(exp_id):
     my_file = Path(filename)
     if my_file.is_file():
         return True
+
+def get_acc_data(exp_id):
+    acc_filename = f'results/experiment_{exp_id}/acc.csv'
+    data = pd.read_csv(acc_filename)
     
+    return data['train_acc'], data['val_acc'], data['test_acc']
+
+def get_loss_data(exp_id):
+    loss_filename = f'results/experiment_{exp_id}/loss.csv'
+    data = pd.read_csv(loss_filename)
+    
+    return data['train_loss'], data['val_loss'], data['test_loss']

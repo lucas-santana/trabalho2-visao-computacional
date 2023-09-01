@@ -38,7 +38,7 @@ def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Los
     
     f.savefig(f'results/experiment_{experiment_id}/loss.pdf')
     
-def plot_confusion_matrix(experiment_id, model, dataloader):
+def plot_confusion_matrix(experiment_id, model, data, dataloader):
     y_pred = []
     y_true = []
 
@@ -60,7 +60,7 @@ def plot_confusion_matrix(experiment_id, model, dataloader):
     df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
 
     # constant for classes
-    classes = ('T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot')
+    classes = data.classes
 
     # Build confusion matrix
     cf_matrix = confusion_matrix(y_true, y_pred)

@@ -28,7 +28,7 @@ from networks.VGG16 import VGG16
 
 from plot import plot_loss, plot_acc, plot_confusion_matrix, plot_samples
 
-from util import make_experiment_folder, parse_exp_json
+from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data
 
 """
     https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-lenet5-cifar10.ipynb
@@ -301,11 +301,12 @@ def model_train(experiment_id):
 
     plot_acc(experiment_id, train_accuracies, test_accuracies)
     plot_loss(experiment_id, train_losses, test_losses)
-    plot_confusion_matrix(experiment_id, best_model, data.test_dataloader )
+    plot_confusion_matrix(experiment_id, best_model, data, data.test_dataloader )
 
     return model
 
 def model_eval(experiment_id):
+    logging.info("Rodando evaluation")
     parameters = parse_exp_json(experiment_id)
     
     network = Networks[parameters['network']].value
@@ -330,5 +331,12 @@ def model_eval(experiment_id):
     model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
     model.eval()
 
-    plot_confusion_matrix(experiment_id, model, data.test_dataloader )
-    print(f"Model structure: {model}\n\n")
+    # carregar arquivo csv
+    
+    train_accuracies, _, test_accuracies = get_acc_data(experiment_id)
+    train_losses, _, test_losses = get_loss_data(experiment_id)
+    
+    plot_acc(experiment_id, train_accuracies, test_accuracies)
+    plot_loss(experiment_id, train_losses, test_losses)
+    plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
+    
