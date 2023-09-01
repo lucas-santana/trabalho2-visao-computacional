@@ -248,7 +248,6 @@ def model_train(experiment_id):
     test_accuracies = []
 
     valid_loss_min = np.Inf
-    best_model = model
     
     logging.info("Iniciando treinamento")
     start_time = time.perf_counter()
@@ -269,18 +268,14 @@ def model_train(experiment_id):
         val_accuracies.append(valid_acc)
         
         if valid_loss <= valid_loss_min:
-            print(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
+            logging.info(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
             valid_loss_min = valid_loss
-            best_model = model
+            torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")         
+    
     end_time = time.perf_counter()
-    logging.info(f"Tempo treinamento:  {end_time-start_time:.2f} seconds")
-    
-    # torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/{data.dataset_name}_{type(best_model).__name__}.pth")         
-    torch.save(best_model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")         
-    
-    # test_loss, test_acc = test_loop(data.test_dataloader, best_model, loss_fn, epoch)
+    train_time = end_time-start_time
+    logging.info(f"Tempo treinamento:  {train_time:.2f} seconds")
      
-    # dataframes das acurácias
     tab_acc = {"train_acc": train_accuracies,
                "val_acc": val_accuracies,
                "test_acc": test_accuracies}
@@ -304,11 +299,11 @@ def model_train(experiment_id):
 
     plot_acc(experiment_id, train_accuracies, test_accuracies)
     plot_loss(experiment_id, train_losses, test_losses)
-    plot_confusion_matrix(experiment_id, best_model, data, data.test_dataloader )
+    plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
+    
+    model_eval(experiment_id, train_time=train_time)
 
-    return model
-
-def model_eval(experiment_id):
+def model_eval(experiment_id, train_time = -1):
     logging.info("Rodando evaluation")
     parameters = parse_exp_json(experiment_id)
     
@@ -317,11 +312,10 @@ def model_eval(experiment_id):
     batch_size = parameters['batch_size']
     learning_rate = parameters['learning_rate']
     num_epochs = parameters['epochs']
+    num_workers = parameters['num_workers']
     
-    data = build_data(network, dataset, batch_size = batch_size)
-    
-    plot_samples(experiment_id, data.train_dataloader)
-    
+    data = build_data(network, dataset, batch_size = batch_size, num_workers=num_workers)
+        
     if network == Networks.LENET5.value:
         model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     elif network == Networks.ALEXNET.value:
@@ -334,18 +328,19 @@ def model_eval(experiment_id):
     model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
     model.eval()
 
-    # carregar arquivo csv
-    
+    # carregar arquivo csv para plotar grafico acurácias
     train_accuracies, _, test_accuracies = get_acc_data(experiment_id)
     train_losses, _, test_losses = get_loss_data(experiment_id)
     
     plot_acc(experiment_id, train_accuracies, test_accuracies)
     plot_loss(experiment_id, train_losses, test_losses)
+    
     plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
     
+    # Calcular a acuracia de teste para o melhor modelo
     loss_fn = nn.CrossEntropyLoss()
     test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, 0)
     val_loss, val_acc = validation_loop(data.valid_dataloader, model, loss_fn, 0)
         
-    save_acc_result(experiment_id, test_acc, val_acc)
+    save_acc_result(experiment_id, test_acc, val_acc, train_time)
     

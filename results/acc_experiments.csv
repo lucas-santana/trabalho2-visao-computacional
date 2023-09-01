@@ -1,4 +1,4 @@
-exp_id,val_acc,test_acc
+exp_id,val_acc,test_acc,train_time
 1,69.29,69.60
 2,65.47,64.89
 3,71.39,70.93

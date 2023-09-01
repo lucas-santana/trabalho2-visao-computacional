@@ -50,14 +50,13 @@ def get_loss_data(exp_id):
     
     return data['train_loss'], data['val_loss'], data['test_loss']
 
-def save_acc_result(exp_id, test_acc, val_acc):
+def save_acc_result(exp_id, test_acc, val_acc, train_time=-1):
     acc_file = f'results/acc_experiments.csv'
-    
-    # tab_acc = [exp_id, val_acc, test_acc]
-    
+        
     tab_acc = {"exp_id": [exp_id],
                "val_acc": [val_acc],
-               "test_acc": [test_acc]
+               "test_acc": [test_acc],
+               "train_time": [train_time]
             }
     
     df_acc = pd.DataFrame(tab_acc)
