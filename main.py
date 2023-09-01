@@ -32,9 +32,9 @@ def main():
    
         make_experiment_folder(args.experiment_id)
 
-        # model_train(args.experiment_id)
+        model_train(args.experiment_id)
 
-        model_eval(args.experiment_id)
+        # model_eval(args.experiment_id)
 
 
     else:

@@ -54,6 +54,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
 
     # Itera sobre os lotes
     for step, (X, y) in enumerate(dataloader):
+        torch.cuda.empty_cache()
         tic = time.perf_counter()
         
         # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
@@ -63,11 +64,19 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         # forward pass        
         pred = model(X) # Faz a predição para os valores atuais dos parâmetros
         loss = loss_fn(pred, y)  # Estima o valor da função de perda
+        
     
         # Backpropagation
-        optimizer.zero_grad(set_to_none=True) # Limpa os gradientes
+        optimizer.zero_grad() # Limpa os gradientes
+        
         loss.backward() # Estima os gradientes
+        print("Chega: ", step)
         optimizer.step() # Atualiza os pesos da rede
+        print("Não chega: ", step)
+        
+        
+        
+        
 
         # loss é um tensor de 1 valor, por isso o item()
         running_loss += loss.item()
@@ -82,10 +91,12 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
             print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
         
         toc = time.perf_counter()
-        gc.collect()
-        del pred, loss, X, y
         
-        # print(f"epoch {epoch} {step} took {toc-tic:.2f} seconds")
+        del pred, loss, X, y
+        gc.collect()
+        
+        
+        print(f"epoch {epoch} {step} took {toc-tic:.2f} seconds")
                
     train_loss = running_loss/num_batches
     accu = 100. * correct/total

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 class DataSet():
     def __init__(self, dataset_type, batch_size, input_size):
+        print("TAMANHO DO BATCH: ", batch_size)
         
         self.dataset_type = dataset_type
         
