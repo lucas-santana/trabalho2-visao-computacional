@@ -1,5 +1,5 @@
 {
-    "network": "VGG16",
+    "network": "LENET5",
     "dataset": "FASHIONMNIST",
     "epochs": 10,
     "batch_size": 8,
