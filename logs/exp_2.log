@@ -141,3 +141,8 @@
               569.5243913829327,
               584.9056324362755,
               791.1642377227545]}
+2023-09-01 13:53:10,404 - root - INFO - --------------------- Iniciando Experimento 2 ---------------------
+2023-09-01 13:53:10,405 - root - INFO - Rodando evaluation
+2023-09-01 13:53:10,405 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-01 13:53:14,675 - root - INFO - Testando época 0
+2023-09-01 13:53:16,920 - root - INFO - Validando época 0

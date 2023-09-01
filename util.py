@@ -49,3 +49,16 @@ def get_loss_data(exp_id):
     data = pd.read_csv(loss_filename)
     
     return data['train_loss'], data['val_loss'], data['test_loss']
+
+def save_acc_result(exp_id, test_acc, val_acc):
+    acc_file = f'results/acc_experiments.csv'
+    
+    # tab_acc = [exp_id, val_acc, test_acc]
+    
+    tab_acc = {"exp_id": [exp_id],
+               "val_acc": [val_acc],
+               "test_acc": [test_acc]
+            }
+    
+    df_acc = pd.DataFrame(tab_acc)
+    df_acc.to_csv(acc_file, mode='a', index=False, header=False, float_format='%.2f')

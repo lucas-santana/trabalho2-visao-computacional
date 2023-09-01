@@ -28,7 +28,7 @@ from networks.VGG16 import VGG16
 
 from plot import plot_loss, plot_acc, plot_confusion_matrix, plot_samples
 
-from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data
+from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result
 
 """
     https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-lenet5-cifar10.ipynb
@@ -342,4 +342,10 @@ def model_eval(experiment_id):
     plot_acc(experiment_id, train_accuracies, test_accuracies)
     plot_loss(experiment_id, train_losses, test_losses)
     plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
+    
+    loss_fn = nn.CrossEntropyLoss()
+    test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, 0)
+    val_loss, val_acc = validation_loop(data.valid_dataloader, model, loss_fn, 0)
+        
+    save_acc_result(experiment_id, test_acc, val_acc)
     
