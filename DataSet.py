@@ -6,8 +6,9 @@ from torch.utils.data import random_split
 import matplotlib.pyplot as plt
 
 class DataSet():
-    def __init__(self, dataset_type, batch_size, input_size):
+    def __init__(self, dataset_type, batch_size, input_size, num_workers=0):
         print("TAMANHO DO BATCH: ", batch_size)
+        print("NUM WORKERS: ", num_workers)
         
         self.dataset_type = dataset_type
         
@@ -83,6 +84,6 @@ class DataSet():
 
         self.training_data, self.valid_data = random_split(self.training_data, [train_size, valid_size])
         
-        self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=0)
-        self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=0)
-        self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=False, pin_memory=True, num_workers=0)
+        self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
+        self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
+        self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)

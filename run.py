@@ -3,7 +3,11 @@ import torch
 import numpy as np
 import pandas as pd
 import time
+import logging
+logging.getLogger("matplotlib").setLevel(logging.CRITICAL)
 
+from pprint import pformat
+from tqdm import tqdm
 
 from torch import nn
 # torch.set_flush_denormal(True)
@@ -33,11 +37,13 @@ from util import make_experiment_folder, parse_exp_json
     https://nvsyashwanth.github.io/machinelearningmaster/cifar-10/
     https://www.youtube.com/watch?v=gbrHEsbTdF0
     https://www.youtube.com/watch?v=doT7koXt9vw
+    https://machinelearningmastery.com/using-learning-rate-schedule-in-pytorch-training/
 """
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
 
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
+    logging.info(f"Treinando época {epoch}")
     running_loss = 0.
     correct = 0
     total = 0
@@ -54,7 +60,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
 
     # Itera sobre os lotes
     tic = time.perf_counter()
-    for step, (X, y) in enumerate(dataloader):
+    for step, (X, y) in enumerate(tqdm(dataloader)):
         torch.cuda.empty_cache()
         
         
@@ -73,9 +79,6 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         loss.backward() # Estima os gradientes
         optimizer.step() # Atualiza os pesos da rede
         
-        
-        
-        
 
         # loss é um tensor de 1 valor, por isso o item()
         running_loss += loss.item()
@@ -87,7 +90,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
             
             loss, current = loss.item(), step * len(X)
             
-            print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+            # print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
         
         
         
@@ -96,15 +99,16 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     toc = time.perf_counter()
         
         
-    print(f"epoch {epoch} took {toc-tic:.2f} seconds")
+    # print(f"epoch {epoch} took {toc-tic:.2f} seconds")
                
-    train_loss = running_loss/num_batches
+    train_loss = running_loss
     accu = 100. * correct/total
     
     print('Train Loss: %.3f | Accuracy: %.3f'%(train_loss, accu))
     return train_loss, accu
 
 def validation_loop(dataloader, model, loss_fn, epoch):
+    logging.info(f"Validando época {epoch}")
     valid_loss = 0.0
     correct = 0
     total = 0
@@ -130,7 +134,7 @@ def validation_loop(dataloader, model, loss_fn, epoch):
             total += y.size(0)
             correct += (output.argmax(1) == y).type(torch.float).sum().item()
     
-    valid_loss = valid_loss/num_batches
+    valid_loss = valid_loss
     accu = 100.*(correct/size)
 
     print('Valid Loss: %.3f | Accuracy: %.3f'%(valid_loss, accu)) 
@@ -138,7 +142,8 @@ def validation_loop(dataloader, model, loss_fn, epoch):
     return valid_loss, accu      
 
 def test_loop(dataloader, model, loss_fn, epoch=None):
-
+    logging.info(f"Testando época {epoch}")
+    
     running_loss = 0
     correct = 0
     total = 0
@@ -172,7 +177,7 @@ def test_loop(dataloader, model, loss_fn, epoch=None):
 
     # test_loss divide pelo n de batches ou tam do dataset
     
-    test_loss = running_loss/num_batches
+    test_loss = running_loss
     accu = 100.*(correct/size)
 
     # LOG: mostra a acurácia e a perda
@@ -180,13 +185,16 @@ def test_loop(dataloader, model, loss_fn, epoch=None):
 
     return test_loss, accu
 
-def build_data(network, dataset, batch_size):
+def build_data(network, dataset, batch_size, num_workers=0):
     if network == Networks.LENET5.value:
-        data = DataSet(dataset, batch_size=batch_size, input_size=32)
+        logging.info(f"Construindo dataset para a rede LENET5")
+        data = DataSet(dataset, batch_size=batch_size, input_size=32, num_workers=num_workers)
     elif network == Networks.ALEXNET.value:
-        data = DataSet(dataset, batch_size=batch_size, input_size=227)
+        logging.info(f"Construindo dataset para a rede ALEXNET")
+        data = DataSet(dataset, batch_size=batch_size, input_size=227, num_workers=num_workers)
     elif network == Networks.VGG16.value:
-        data = DataSet(dataset, batch_size=batch_size, input_size=224)
+        logging.info(f"Construindo dataset para a rede VGG16")
+        data = DataSet(dataset, batch_size=batch_size, input_size=224, num_workers=num_workers)
     else:
         raise Exception("Network not supported: ", network)
     
@@ -195,29 +203,36 @@ def build_data(network, dataset, batch_size):
 def model_train(experiment_id):
     
     parameters = parse_exp_json(experiment_id)
-    print(parameters)
+    
+    logging.info("Parametros")
+    logging.info(pformat(parameters))
     
     network = Networks[parameters['network']].value
     dataset = DataSetType[parameters['dataset']].value
     batch_size = parameters['batch_size']
     learning_rate = parameters['learning_rate']
     num_epochs = parameters['epochs']
+    num_workers = parameters['num_workers']
     
-    data = build_data(network, dataset, batch_size = batch_size)
+    
+    data = build_data(network, dataset, batch_size = batch_size, num_workers=num_workers)
     
     plot_samples(experiment_id, data.train_dataloader)
     
     if network == Networks.LENET5.value:
+        logging.info(f"Construindo modelo para a rede LENET5")
         model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     elif network == Networks.ALEXNET.value:
+        logging.info(f"Construindo modelo para a rede ALEXNET")
         model = AlexNet(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     elif network == Networks.VGG16.value:
+        logging.info(f"Construindo modelo para a rede VGG16")
         model = VGG16(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
     else:
         raise Exception("Network not supported: ", network)
     
     print(f"Model structure: {model}\n\n")
-
+    logging.info(pformat(model))
     
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
@@ -234,7 +249,10 @@ def model_train(experiment_id):
 
     valid_loss_min = np.Inf
     best_model = model
+    
+    logging.info("Iniciando treinamento")
     for epoch in range(num_epochs):
+        logging.info(f"Epoch {epoch+1}\n-------------------------------")
         print(f"Epoch {epoch+1}\n-------------------------------")
         
         train_loss, train_acc = train_loop(data.train_dataloader, model, loss_fn, optimizer, epoch)
@@ -268,6 +286,12 @@ def model_train(experiment_id):
                "val_loss": val_losses,
                "test_loss": test_losses}
     
+    logging.info("Métricas")
+    logging.info("ACC")
+    logging.info(pformat(tab_acc))
+    
+    logging.info("LOSS")
+    logging.info(pformat(tab_loss))
     
     df_acc = pd.DataFrame(tab_acc)
     df_acc.to_csv(f'results/experiment_{experiment_id}/acc.csv', index=False, float_format='%.2f')
@@ -275,8 +299,8 @@ def model_train(experiment_id):
     df_loss = pd.DataFrame(tab_loss)
     df_loss.to_csv(f'results/experiment_{experiment_id}/loss.csv', index=False, float_format='%.2f')
 
-    plot_acc(experiment_id, train_accuracies, val_accuracies)
-    plot_loss(experiment_id, train_losses, val_losses)
+    plot_acc(experiment_id, train_accuracies, test_accuracies)
+    plot_loss(experiment_id, train_losses, test_losses)
     plot_confusion_matrix(experiment_id, best_model, data.test_dataloader )
 
     return model
