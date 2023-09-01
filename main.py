@@ -2,7 +2,7 @@ import argparse
 import torch
 import logging
 
-from torch.utils.tensorboard import SummaryWriter
+
 
 from run import model_train, model_eval
 from DatasetTypeEnum import DataSetType
@@ -17,7 +17,7 @@ logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
-writer = SummaryWriter()
+
 
 torch.manual_seed(7)
 
@@ -39,9 +39,7 @@ def main():
 
     else:
         logging.error(f"Erro! Experimento {args.experiment_id} não existe")
-        
-    writer.flush()
-    writer.close()
+
 
 if __name__ == "__main__":
     main()
