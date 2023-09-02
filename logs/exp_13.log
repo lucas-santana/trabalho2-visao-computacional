@@ -1,0 +1,133 @@
+2023-09-02 02:06:43,939 - root - INFO - --------------------- Iniciando Novo Treinamento 13 ---------------------
+2023-09-02 02:06:43,939 - root - INFO - Parametros
+2023-09-02 02:06:43,939 - root - INFO - {'batch_size': 64,
+ 'dataset': 'FASHIONMNIST',
+ 'epochs': 10,
+ 'learning_rate': 0.01,
+ 'network': 'LENET5',
+ 'num_workers': 1}
+2023-09-02 02:06:43,939 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-02 02:06:44,164 - root - INFO - Construindo modelo para a rede LENET5
+2023-09-02 02:06:44,166 - root - INFO - LeNet5(
+  (layer1): Sequential(
+    (0): Conv2d(1, 6, kernel_size=(5, 5), stride=(1, 1))
+    (1): BatchNorm2d(6, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer2): Sequential(
+    (0): Conv2d(6, 16, kernel_size=(5, 5), stride=(1, 1))
+    (1): BatchNorm2d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Linear(in_features=400, out_features=120, bias=True)
+  (relu): ReLU()
+  (fc1): Linear(in_features=120, out_features=84, bias=True)
+  (relu1): ReLU()
+  (fc2): Linear(in_features=84, out_features=10, bias=True)
+)
+2023-09-02 02:06:44,166 - root - INFO - Iniciando treinamento
+2023-09-02 02:06:44,166 - root - INFO - Epoch 1
+-------------------------------
+2023-09-02 02:07:31,624 - root - INFO - Validation loss decreased from : inf ----> 0.40067334156087103 ----> Saving Model.......
+2023-09-02 02:07:31,627 - root - INFO - Época: 1 - Test Acc: 84.44 - Val Acc: 84.89999999999999
+2023-09-02 02:07:31,627 - root - INFO - Epoch 2
+-------------------------------
+2023-09-02 02:08:19,812 - root - INFO - Validation loss decreased from : 0.40067334156087103 ----> 0.33280207268259626 ----> Saving Model.......
+2023-09-02 02:08:19,813 - root - INFO - Época: 2 - Test Acc: 88.01 - Val Acc: 87.9
+2023-09-02 02:08:19,814 - root - INFO - Epoch 3
+-------------------------------
+2023-09-02 02:09:07,415 - root - INFO - Época: 3 - Test Acc: 86.56 - Val Acc: 87.11666666666666
+2023-09-02 02:09:07,415 - root - INFO - Epoch 4
+-------------------------------
+2023-09-02 02:09:55,461 - root - INFO - Validation loss decreased from : 0.33280207268259626 ----> 0.32487130874490483 ----> Saving Model.......
+2023-09-02 02:09:55,463 - root - INFO - Época: 4 - Test Acc: 88.0 - Val Acc: 88.2
+2023-09-02 02:09:55,463 - root - INFO - Epoch 5
+-------------------------------
+2023-09-02 02:10:42,935 - root - INFO - Época: 5 - Test Acc: 86.91 - Val Acc: 87.84166666666667
+2023-09-02 02:10:42,935 - root - INFO - Epoch 6
+-------------------------------
+2023-09-02 02:11:31,259 - root - INFO - Validation loss decreased from : 0.32487130874490483 ----> 0.3076667541915432 ----> Saving Model.......
+2023-09-02 02:11:31,261 - root - INFO - Época: 6 - Test Acc: 88.32 - Val Acc: 89.18333333333334
+2023-09-02 02:11:31,261 - root - INFO - Epoch 7
+-------------------------------
+2023-09-02 02:12:18,818 - root - INFO - Época: 7 - Test Acc: 87.24 - Val Acc: 88.05
+2023-09-02 02:12:18,819 - root - INFO - Epoch 8
+-------------------------------
+2023-09-02 02:13:06,835 - root - INFO - Época: 8 - Test Acc: 88.24 - Val Acc: 88.71666666666667
+2023-09-02 02:13:06,835 - root - INFO - Epoch 9
+-------------------------------
+2023-09-02 02:13:54,968 - root - INFO - Validation loss decreased from : 0.3076667541915432 ----> 0.30472797432795484 ----> Saving Model.......
+2023-09-02 02:13:54,970 - root - INFO - Época: 9 - Test Acc: 89.12 - Val Acc: 89.36666666666667
+2023-09-02 02:13:54,970 - root - INFO - Epoch 10
+-------------------------------
+2023-09-02 02:14:43,007 - root - INFO - Época: 10 - Test Acc: 88.34 - Val Acc: 88.97500000000001
+2023-09-02 02:14:43,007 - root - INFO - Tempo treinamento:  478.84 seconds
+2023-09-02 02:14:43,007 - root - INFO - Métricas
+2023-09-02 02:14:43,007 - root - INFO - ACC
+2023-09-02 02:14:43,007 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_acc': [84.44,
+              88.01,
+              86.56,
+              88.0,
+              86.91,
+              88.32,
+              87.24,
+              88.24,
+              89.12,
+              88.34],
+ 'train_acc': [81.25208333333333,
+               86.95416666666667,
+               88.27083333333333,
+               88.99166666666666,
+               89.39166666666667,
+               90.09166666666667,
+               90.50833333333334,
+               90.59166666666667,
+               90.98958333333333,
+               90.98333333333333],
+ 'val_acc': [84.89999999999999,
+             87.9,
+             87.11666666666666,
+             88.2,
+             87.84166666666667,
+             89.18333333333334,
+             88.05,
+             88.71666666666667,
+             89.36666666666667,
+             88.97500000000001]}
+2023-09-02 02:14:43,007 - root - INFO - LOSS
+2023-09-02 02:14:43,007 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_loss': [0.4189335734221586,
+               0.3401938666393802,
+               0.3726558621711792,
+               0.3446925439082893,
+               0.3586324758495495,
+               0.3234848777294918,
+               0.3542819891575795,
+               0.32748563929348234,
+               0.31863111414157663,
+               0.32615639630017007],
+ 'train_loss': [0.5002803340951602,
+                0.3528558462957541,
+                0.3181359645426273,
+                0.3002223865191142,
+                0.2906752958993117,
+                0.2725390068391959,
+                0.26140557777881623,
+                0.25364156123499076,
+                0.24512820503115654,
+                0.24622250480453173],
+ 'val_loss': [0.40067334156087103,
+              0.33280207268259626,
+              0.3595215693274711,
+              0.32487130874490483,
+              0.33583592516469196,
+              0.3076667541915432,
+              0.3440734556618523,
+              0.31146590031207877,
+              0.30472797432795484,
+              0.313947413195955]}
+2023-09-02 02:14:43,856 - root - INFO - Rodando evaluation
+2023-09-02 02:14:43,856 - root - INFO - Construindo dataset para a rede LENET5
