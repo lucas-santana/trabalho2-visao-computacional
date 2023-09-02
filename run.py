@@ -276,7 +276,7 @@ def model_train(experiment_id):
         """
         if valid_loss <= valid_loss_min:
             logging.info(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
-            logging.info("Validation acc: ", valid_acc)
+            logging.info(f"Validation acc:  {valid_acc}")
             
             valid_loss_min = valid_loss
             torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")
