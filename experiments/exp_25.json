@@ -1,0 +1,8 @@
+{
+    "network": "ALEXNET",
+    "dataset": "FASHIONMNIST",
+    "epochs": 10,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "num_workers": 1
+}
