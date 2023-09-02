@@ -1,0 +1,207 @@
+2023-09-02 06:11:22,514 - root - INFO - --------------------- Iniciando Novo Treinamento 35 ---------------------
+2023-09-02 06:11:22,515 - root - INFO - Parametros
+2023-09-02 06:11:22,515 - root - INFO - {'batch_size': 32,
+ 'dataset': 'CIFAR10',
+ 'epochs': 15,
+ 'learning_rate': 0.001,
+ 'network': 'ALEXNET',
+ 'num_workers': 1}
+2023-09-02 06:11:22,515 - root - INFO - Construindo dataset para a rede ALEXNET
+2023-09-02 06:11:26,859 - root - INFO - Construindo modelo para a rede ALEXNET
+2023-09-02 06:11:30,031 - root - INFO - AlexNet(
+  (layer1): Sequential(
+    (0): Conv2d(3, 288, kernel_size=(11, 11), stride=(4, 4))
+    (1): BatchNorm2d(288, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer2): Sequential(
+    (0): Conv2d(288, 768, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (1): BatchNorm2d(768, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer3): Sequential(
+    (0): Conv2d(768, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(1152, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer4): Sequential(
+    (0): Conv2d(1152, 1152, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(1152, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer5): Sequential(
+    (0): Conv2d(1152, 768, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(768, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=27648, out_features=12288, bias=True)
+    (2): ReLU()
+  )
+  (fc1): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=12288, out_features=12288, bias=True)
+    (2): ReLU()
+  )
+  (fc2): Sequential(
+    (0): Linear(in_features=12288, out_features=10, bias=True)
+  )
+)
+2023-09-02 06:11:30,032 - root - INFO - Iniciando treinamento
+2023-09-02 06:11:30,032 - root - INFO - Epoch 1
+-------------------------------
+2023-09-02 06:20:56,623 - root - INFO - Validation loss decreased from : inf ----> 1.9838932657394166 ----> Saving Model.......
+2023-09-02 06:20:56,623 - root - INFO - Validation acc:  19.41
+2023-09-02 06:21:03,545 - root - INFO - Época: 1 - Test Acc: 20.630000000000003 - Val Acc: 19.41
+2023-09-02 06:21:03,627 - root - INFO - Epoch 2
+-------------------------------
+2023-09-02 06:30:28,328 - root - INFO - Época: 2 - Test Acc: 20.669999999999998 - Val Acc: 20.87
+2023-09-02 06:30:28,349 - root - INFO - Epoch 3
+-------------------------------
+2023-09-02 06:39:43,889 - root - INFO - Validation loss decreased from : 1.9838932657394166 ----> 1.9625447653353023 ----> Saving Model.......
+2023-09-02 06:39:43,890 - root - INFO - Validation acc:  21.07
+2023-09-02 06:40:01,596 - root - INFO - Época: 3 - Test Acc: 21.44 - Val Acc: 21.07
+2023-09-02 06:40:01,639 - root - INFO - Epoch 4
+-------------------------------
+2023-09-02 06:49:11,722 - root - INFO - Validation loss decreased from : 1.9625447653353023 ----> 1.9565222998396656 ----> Saving Model.......
+2023-09-02 06:49:11,722 - root - INFO - Validation acc:  22.71
+2023-09-02 06:49:28,973 - root - INFO - Época: 4 - Test Acc: 22.66 - Val Acc: 22.71
+2023-09-02 06:49:29,013 - root - INFO - Epoch 5
+-------------------------------
+2023-09-02 06:58:39,921 - root - INFO - Época: 5 - Test Acc: 22.98 - Val Acc: 23.18
+2023-09-02 06:58:39,921 - root - INFO - Epoch 6
+-------------------------------
+2023-09-02 07:07:50,039 - root - INFO - Validation loss decreased from : 1.9565222998396656 ----> 1.890116179713045 ----> Saving Model.......
+2023-09-02 07:07:50,039 - root - INFO - Validation acc:  24.14
+2023-09-02 07:08:07,650 - root - INFO - Época: 6 - Test Acc: 24.09 - Val Acc: 24.14
+2023-09-02 07:08:07,692 - root - INFO - Epoch 7
+-------------------------------
+2023-09-02 07:17:17,609 - root - INFO - Época: 7 - Test Acc: 18.709999999999997 - Val Acc: 18.25
+2023-09-02 07:17:17,609 - root - INFO - Epoch 8
+-------------------------------
+2023-09-02 07:26:29,186 - root - INFO - Época: 8 - Test Acc: 17.86 - Val Acc: 18.060000000000002
+2023-09-02 07:26:29,186 - root - INFO - Epoch 9
+-------------------------------
+2023-09-02 07:35:39,047 - root - INFO - Época: 9 - Test Acc: 22.27 - Val Acc: 21.9
+2023-09-02 07:35:39,047 - root - INFO - Epoch 10
+-------------------------------
+2023-09-02 07:44:50,439 - root - INFO - Época: 10 - Test Acc: 23.73 - Val Acc: 23.74
+2023-09-02 07:44:50,439 - root - INFO - Epoch 11
+-------------------------------
+2023-09-02 07:54:02,322 - root - INFO - Validation loss decreased from : 1.890116179713045 ----> 1.7964796441050763 ----> Saving Model.......
+2023-09-02 07:54:02,322 - root - INFO - Validation acc:  27.79
+2023-09-02 07:54:20,016 - root - INFO - Época: 11 - Test Acc: 27.47 - Val Acc: 27.79
+2023-09-02 07:54:20,051 - root - INFO - Epoch 12
+-------------------------------
+2023-09-02 08:03:29,956 - root - INFO - Época: 12 - Test Acc: 25.1 - Val Acc: 24.8
+2023-09-02 08:03:29,957 - root - INFO - Epoch 13
+-------------------------------
+2023-09-02 08:12:41,833 - root - INFO - Época: 13 - Test Acc: 22.24 - Val Acc: 22.650000000000002
+2023-09-02 08:12:41,833 - root - INFO - Epoch 14
+-------------------------------
+2023-09-02 08:21:52,731 - root - INFO - Época: 14 - Test Acc: 24.11 - Val Acc: 24.2
+2023-09-02 08:21:52,731 - root - INFO - Epoch 15
+-------------------------------
+2023-09-02 08:31:03,305 - root - INFO - Época: 15 - Test Acc: 20.979999999999997 - Val Acc: 21.64
+2023-09-02 08:31:03,305 - root - INFO - Tempo treinamento:  8373.27 seconds
+2023-09-02 08:31:03,305 - root - INFO - Métricas
+2023-09-02 08:31:03,305 - root - INFO - ACC
+2023-09-02 08:31:03,305 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+ 'test_acc': [20.630000000000003,
+              20.669999999999998,
+              21.44,
+              22.66,
+              22.98,
+              24.09,
+              18.709999999999997,
+              17.86,
+              22.27,
+              23.73,
+              27.47,
+              25.1,
+              22.24,
+              24.11,
+              20.979999999999997],
+ 'train_acc': [17.08,
+               17.495,
+               18.2675,
+               18.8875,
+               20.415,
+               20.285,
+               20.8625,
+               20.28,
+               18.7825,
+               20.95,
+               22.0,
+               21.6875,
+               22.7325,
+               21.755,
+               22.805],
+ 'val_acc': [19.41,
+             20.87,
+             21.07,
+             22.71,
+             23.18,
+             24.14,
+             18.25,
+             18.060000000000002,
+             21.9,
+             23.74,
+             27.79,
+             24.8,
+             22.650000000000002,
+             24.2,
+             21.64]}
+2023-09-02 08:31:03,305 - root - INFO - LOSS
+2023-09-02 08:31:03,306 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+ 'test_loss': [1.9787632386905316,
+               2.028905275149848,
+               1.964115583858551,
+               1.9627381749808217,
+               1.969999045609666,
+               1.8943571473082033,
+               1.997412335758392,
+               2.1662128116376103,
+               1.974737852526168,
+               1.93980631051353,
+               1.801380909289034,
+               1.850622796783813,
+               1.9435100208837004,
+               1.8848352824537138,
+               1.9096327174585848],
+ 'train_loss': [2.926861766529083,
+                2.0661045495033266,
+                2.0288639640808106,
+                2.044684530067444,
+                1.9870253413200378,
+                1.996738916683197,
+                1.9737185176849366,
+                1.972935109424591,
+                2.0265985692024233,
+                1.955272586917877,
+                1.914051870918274,
+                1.938310338306427,
+                1.897224508857727,
+                1.9350092619895936,
+                1.9041642616271972],
+ 'val_loss': [1.9838932657394166,
+              2.0261928273466068,
+              1.9625447653353023,
+              1.9565222998396656,
+              1.9685238215108267,
+              1.890116179713045,
+              2.0003781604309814,
+              2.166768519642254,
+              1.9746546113072112,
+              1.9399624857277915,
+              1.7964796441050763,
+              1.8520548008501339,
+              1.9406405881570932,
+              1.8774922888119,
+              1.9039138296541696]}
+2023-09-02 08:31:24,570 - root - INFO - Rodando evaluation
+2023-09-02 08:31:24,571 - root - INFO - Construindo dataset para a rede ALEXNET
