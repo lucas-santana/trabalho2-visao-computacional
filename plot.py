@@ -76,3 +76,38 @@ def plot_samples(experiment_id, dataloader):
         plt.imshow(make_grid(images, nrow=16).permute((1, 2, 0)))
         f.savefig(f'results/experiment_{experiment_id}/image_grid.pdf')
         break
+
+def save_plots(experiment_id, train_acc, valid_acc, train_loss, valid_loss):
+    """
+    Function to save the loss and accuracy plots to disk.
+    """
+    # accuracy plots
+    plt.figure(figsize=(10, 7))
+    plt.plot(
+        train_acc, color='green', linestyle='-', 
+        label='train accuracy'
+    )
+    plt.plot(
+        valid_acc, color='blue', linestyle='-', 
+        label='validataion accuracy'
+    )
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.savefig(f'results/experiment_{experiment_id}/train_val_acc.pdf')
+    
+    # loss plots
+    plt.figure(figsize=(10, 7))
+    plt.plot(
+        train_loss, color='orange', linestyle='-', 
+        label='train loss'
+    )
+    plt.plot(
+        valid_loss, color='red', linestyle='-', 
+        label='validataion loss'
+    )
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    
+    plt.savefig(f'results/experiment_{experiment_id}/train_val_loss.pdf')

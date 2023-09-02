@@ -26,7 +26,7 @@ from networks.LeNet5 import LeNet5
 from networks.AlexNet import AlexNet
 from networks.VGG16 import VGG16
 
-from plot import plot_loss, plot_acc, plot_confusion_matrix, plot_samples
+from plot import plot_loss, plot_acc, plot_confusion_matrix, plot_samples, save_plots
 
 from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result
 
@@ -314,8 +314,10 @@ def model_train(experiment_id):
     df_loss = pd.DataFrame(tab_loss)
     df_loss.to_csv(f'results/experiment_{experiment_id}/hist_loss.csv', index=False, float_format='%.2f')
 
-    plot_acc(experiment_id, train_accuracies, test_accuracies)
-    plot_loss(experiment_id, train_losses, test_losses)
+    # plot_acc(experiment_id, train_accuracies, val_accuracies)
+    # plot_loss(experiment_id, train_losses, val_losses)
+    
+    save_plots(experiment_id, train_accuracies, val_accuracies, train_losses, val_losses)
         
     y_pred, y_true = get_pred(model, data.test_dataloader)
     plot_confusion_matrix(experiment_id, model, data, y_pred, y_true)
@@ -347,11 +349,11 @@ def model_eval(experiment_id, train_time = -1):
     model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
 
     # carregar arquivo csv para plotar grafico acurácias
-    # train_accuracies, _, test_accuracies = get_acc_data(experiment_id)
-    # train_losses, _, test_losses = get_loss_data(experiment_id)
+    train_accuracies, val_accuracies, test_accuracies = get_acc_data(experiment_id)
+    train_losses, val_losses, test_losses = get_loss_data(experiment_id)
     
-    # plot_acc(experiment_id, train_accuracies, test_accuracies)
-    # plot_loss(experiment_id, train_losses, test_losses)
+    plot_acc(experiment_id, train_accuracies, val_accuracies)
+    plot_loss(experiment_id, train_losses, val_losses)
     
     
     y_pred, y_true = get_pred(model, data.test_dataloader)
