@@ -38,19 +38,8 @@ def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Los
     
     f.savefig(f'results/experiment_{experiment_id}/loss.pdf')
     
-def plot_confusion_matrix(experiment_id, model, data, dataloader):
-    y_pred = []
-    y_true = []
-
-    model.eval()
-    # iterate over test data
-    for inputs, labels in dataloader:
-        
-        outputs = model(inputs)
-        _, preds = torch.max(outputs, 1)
-        y_pred.extend(preds.cpu().numpy())
-        y_true.extend(labels.cpu().numpy())
-
+def plot_confusion_matrix(experiment_id, model, data, y_pred, y_true):
+    
     tab_pred = {"target": y_true,
                "prediction": y_pred
             }

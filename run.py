@@ -38,12 +38,12 @@ from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_
     https://www.youtube.com/watch?v=gbrHEsbTdF0
     https://www.youtube.com/watch?v=doT7koXt9vw
     https://machinelearningmastery.com/using-learning-rate-schedule-in-pytorch-training/
+    https://debuggercafe.com/saving-and-loading-the-best-model-in-pytorch/
 """
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
 
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
-    logging.info(f"Época {epoch}")
     running_loss = 0.
     correct = 0
     total = 0
@@ -60,7 +60,9 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
 
     # Itera sobre os lotes
     tic = time.perf_counter()
+    counter = 0
     for step, (X, y) in enumerate(tqdm(dataloader)):
+        counter += 1
         torch.cuda.empty_cache()
         
         
@@ -101,7 +103,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         
     # print(f"epoch {epoch} took {toc-tic:.2f} seconds")
                
-    train_loss = running_loss
+    train_loss = running_loss / counter
     accu = 100. * correct/total
     
     print('Train Loss: %.3f | Accuracy: %.3f'%(train_loss, accu))
@@ -121,7 +123,9 @@ def validation_loop(dataloader, model, loss_fn, epoch):
     model.eval()
     with torch.no_grad():
         
+        counter = 0
         for X, y in dataloader:
+            counter += 1
             
             X, y = X.to(device), y.to(device)
 
@@ -133,7 +137,7 @@ def validation_loop(dataloader, model, loss_fn, epoch):
             total += y.size(0)
             correct += (output.argmax(1) == y).type(torch.float).sum().item()
     
-    valid_loss = valid_loss
+    valid_loss = valid_loss / counter
     accu = 100.*(correct/size)
 
     print('Valid Loss: %.3f | Accuracy: %.3f'%(valid_loss, accu)) 
@@ -159,8 +163,10 @@ def test_loop(dataloader, model, loss_fn, epoch=None):
     # also serves to reduce unnecessary gradient computations and memory usage for tensors with requires_grad=True
     # Desabilita o cálculo do gradiente
     with torch.no_grad():
+        counter = 0
         # Itera sobre o conjunto de teste
         for X, y in dataloader:
+            counter += 1
             # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
             X, y = X.to(device), y.to(device)
             # Realiza a predição
@@ -174,7 +180,7 @@ def test_loop(dataloader, model, loss_fn, epoch=None):
 
     # test_loss divide pelo n de batches ou tam do dataset
     
-    test_loss = running_loss
+    test_loss = running_loss / counter
     accu = 100.*(correct/size)
 
     # LOG: mostra a acurácia e a perda
@@ -281,7 +287,7 @@ def model_train(experiment_id):
     train_time = end_time-start_time
     logging.info(f"Tempo treinamento:  {train_time:.2f} seconds")
     
-    epochs_values = [i for i in range(1, num_epochs)]
+    epochs_values = [i+1 for i in range(0, num_epochs)]
     tab_acc = {
                 "epoch": epochs_values,
                 "train_acc": train_accuracies,
@@ -310,7 +316,9 @@ def model_train(experiment_id):
 
     plot_acc(experiment_id, train_accuracies, test_accuracies)
     plot_loss(experiment_id, train_losses, test_losses)
-    plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
+        
+    y_pred, y_true = get_pred(model, data.test_dataloader)
+    plot_confusion_matrix(experiment_id, model, data, y_pred, y_true)
     
     model_eval(experiment_id, train_time=train_time)
 
@@ -345,7 +353,9 @@ def model_eval(experiment_id, train_time = -1):
     # plot_acc(experiment_id, train_accuracies, test_accuracies)
     # plot_loss(experiment_id, train_losses, test_losses)
     
-    # plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
+    
+    y_pred, y_true = get_pred(model, data.test_dataloader)
+    plot_confusion_matrix(experiment_id, model, data, y_pred, y_true)
     
     # Calcular a acuracia de teste para o melhor modelo
     loss_fn = nn.CrossEntropyLoss()
@@ -354,3 +364,19 @@ def model_eval(experiment_id, train_time = -1):
         
     save_acc_result(experiment_id, test_acc, val_acc, train_time)
     
+def get_pred(model, dataloader):
+    y_pred = []
+    y_true = []
+
+    model.eval()
+    # iterate over test data
+    for inputs, labels in dataloader:
+        
+        inputs, labels = inputs.to(device), labels.to(device)
+        
+        outputs = model(inputs)
+        _, preds = torch.max(outputs, 1)
+        y_pred.extend(preds.cpu().numpy())
+        y_true.extend(labels.cpu().numpy())
+    
+    return y_pred, y_true
