@@ -42,6 +42,7 @@ def plot_confusion_matrix(experiment_id, model, data, dataloader):
     y_pred = []
     y_true = []
 
+    model.eval()
     # iterate over test data
     for inputs, labels in dataloader:
         
@@ -49,8 +50,6 @@ def plot_confusion_matrix(experiment_id, model, data, dataloader):
         _, preds = torch.max(outputs, 1)
         y_pred.extend(preds.cpu().numpy())
         y_true.extend(labels.cpu().numpy())
-
-    predictions = np.array([y_pred, y_true])
 
     tab_pred = {"target": y_true,
                "prediction": y_pred

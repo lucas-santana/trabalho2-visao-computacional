@@ -337,11 +337,10 @@ def model_eval(experiment_id, train_time = -1):
         raise Exception("Network not supported: ", network)
     
     model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
-    model.eval()
 
     # carregar arquivo csv para plotar grafico acurácias
-    train_accuracies, _, test_accuracies = get_acc_data(experiment_id)
-    train_losses, _, test_losses = get_loss_data(experiment_id)
+    # train_accuracies, _, test_accuracies = get_acc_data(experiment_id)
+    # train_losses, _, test_losses = get_loss_data(experiment_id)
     
     # plot_acc(experiment_id, train_accuracies, test_accuracies)
     # plot_loss(experiment_id, train_losses, test_losses)
