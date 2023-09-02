@@ -1,0 +1,8 @@
+{
+    "network": "VGG16",
+    "dataset": "CIFAR10",
+    "epochs": 10,
+    "batch_size": 32,
+    "learning_rate": 0.01,
+    "num_workers": 1
+}
