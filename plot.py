@@ -38,15 +38,8 @@ def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Los
     
     f.savefig(f'results/experiment_{experiment_id}/loss.pdf')
     
-def plot_confusion_matrix(experiment_id, model, data, y_pred, y_true):
+def plot_confusion_matrix(experiment_id, data, y_pred, y_true):
     
-    tab_pred = {"target": y_true,
-               "prediction": y_pred
-            }
-
-    df_pred = pd.DataFrame(tab_pred)
-    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
-
     # constant for classes
     classes = data.classes
 

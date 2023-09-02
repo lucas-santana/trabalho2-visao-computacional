@@ -318,13 +318,21 @@ def model_train(experiment_id):
     # plot_loss(experiment_id, train_losses, val_losses)
     
     save_plots(experiment_id, train_accuracies, val_accuracies, train_losses, val_losses)
-        
-    y_pred, y_true = get_pred(model, data.test_dataloader)
-    plot_confusion_matrix(experiment_id, model, data, y_pred, y_true)
+    
+    # salvar as predições
+    save_pred(experiment_id, model, data.test_dataloader)
+    
+    # ler arquivo predicoes
+    y_pred, y_true = get_pred(experiment_id)
+    
+    plot_confusion_matrix(experiment_id, data, y_pred, y_true)
     
     model_eval(experiment_id, train_time=train_time)
 
 def model_eval(experiment_id, train_time = -1):
+    """
+        Precisa que modelo esteja salvo para realizar o teste
+    """
     logging.info("Rodando evaluation")
     parameters = parse_exp_json(experiment_id)
     
@@ -357,7 +365,7 @@ def model_eval(experiment_id, train_time = -1):
     
     
     y_pred, y_true = get_pred(model, data.test_dataloader)
-    plot_confusion_matrix(experiment_id, model, data, y_pred, y_true)
+    plot_confusion_matrix(experiment_id, data, y_pred, y_true)
     
     # Calcular a acuracia de teste para o melhor modelo
     loss_fn = nn.CrossEntropyLoss()
@@ -366,7 +374,14 @@ def model_eval(experiment_id, train_time = -1):
         
     save_acc_result(experiment_id, test_acc, val_acc, train_time)
     
-def get_pred(model, dataloader):
+def get_pred(exp_id):
+
+    predictions_filename = f'results/experiment_{exp_id}/predictions.csv'
+    data = pd.read_csv(predictions_filename)
+    
+    return data['target'], data['prediction']
+
+def save_pred(experiment_id, model, dataloader):
     y_pred = []
     y_true = []
 
@@ -380,5 +395,10 @@ def get_pred(model, dataloader):
         _, preds = torch.max(outputs, 1)
         y_pred.extend(preds.cpu().numpy())
         y_true.extend(labels.cpu().numpy())
-    
-    return y_pred, y_true
+
+    tab_pred = {"target": y_true,
+               "prediction": y_pred
+    }
+
+    df_pred = pd.DataFrame(tab_pred)
+    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
