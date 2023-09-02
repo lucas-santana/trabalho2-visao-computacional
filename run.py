@@ -279,7 +279,7 @@ def model_train(experiment_id):
             logging.info(f"Validation acc:  {valid_acc}")
             
             valid_loss_min = valid_loss
-            torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")
+            # torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")
         
         logging.info(f"Época: {epoch+1} - Test Acc: {test_acc} - Val Acc: {valid_acc}")
     
