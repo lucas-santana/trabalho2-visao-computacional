@@ -364,7 +364,7 @@ def model_eval(experiment_id, train_time = -1):
     plot_loss(experiment_id, train_losses, val_losses)
     
     
-    y_pred, y_true = get_pred(model, data.test_dataloader)
+    y_pred, y_true = get_pred(experiment_id)
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
     
     # Calcular a acuracia de teste para o melhor modelo
