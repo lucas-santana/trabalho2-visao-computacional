@@ -1,0 +1,11 @@
+,T-shirt/top,Trouser,Pullover,Dress,Coat,Sandal,Shirt,Sneaker,Bag,Ankle boot
+T-shirt/top,873,1,23,15,2,1,82,0,3,0
+Trouser,2,979,0,15,1,0,3,0,0,0
+Pullover,9,1,930,5,26,0,27,0,2,0
+Dress,11,1,9,937,16,0,25,0,1,0
+Coat,2,0,71,27,854,0,44,0,2,0
+Sandal,0,0,0,0,0,986,0,9,0,5
+Shirt,115,2,98,23,57,0,701,0,4,0
+Sneaker,0,0,0,0,0,11,0,984,0,5
+Bag,3,0,1,5,1,2,5,0,983,0
+Ankle boot,0,0,1,0,0,3,0,59,0,937
