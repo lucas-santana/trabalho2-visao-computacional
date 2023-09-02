@@ -86,5 +86,5 @@ def plot_samples(experiment_id, dataloader):
         f = plt.figure(figsize=(16,8))
         plt.axis('off')
         plt.imshow(make_grid(images, nrow=16).permute((1, 2, 0)))
-        f.savefig(f'results/experiment_{experiment_id}/image_grid.png')
+        f.savefig(f'results/experiment_{experiment_id}/image_grid.pdf')
         break

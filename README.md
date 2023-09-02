@@ -3,7 +3,7 @@
 # Criação do ambiente
 
 CPU
--  conda create -n trab2_visao -c pytorch pytorch torchvision cpuonly numpy matplotlib tensorboard scikit-learn seaborn
+-  conda create -n trab2_visao -c pytorch pytorch torchvision cpuonly numpy matplotlib scikit-learn seaborn
 
 GPU
     conda create -n T2 python=3.11
@@ -13,8 +13,15 @@ GPU
 
 conda remove -n T2 --all
 
+# Verificar Instalação
+    import torch
+    torch.cuda.is_available()
 # Execução do programa
 
 python main.py -h # para ver a lista de parametros
-python main.py -n ['LENET5', 'ALEXNET', 'VGG16'] -d ['CIFAR10', 'FASHIONMNIST']
-python main.py -n LENET5 -d FASHIONMNIST -e 5
+python main.py -e 0 -t [0,1]
+    
+
+
+
+

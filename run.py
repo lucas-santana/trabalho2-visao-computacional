@@ -43,7 +43,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
 
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
-    logging.info(f"Treinando época {epoch}")
+    logging.info(f"Época {epoch}")
     running_loss = 0.
     correct = 0
     total = 0
@@ -108,7 +108,6 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     return train_loss, accu
 
 def validation_loop(dataloader, model, loss_fn, epoch):
-    logging.info(f"Validando época {epoch}")
     valid_loss = 0.0
     correct = 0
     total = 0
@@ -141,9 +140,7 @@ def validation_loop(dataloader, model, loss_fn, epoch):
 
     return valid_loss, accu      
 
-def test_loop(dataloader, model, loss_fn, epoch=None):
-    logging.info(f"Testando época {epoch}")
-    
+def test_loop(dataloader, model, loss_fn, epoch=None):    
     running_loss = 0
     correct = 0
     total = 0
@@ -267,20 +264,34 @@ def model_train(experiment_id):
         val_losses.append(valid_loss)
         val_accuracies.append(valid_acc)
         
+        """
+            Pode acontecer da acurácia ir aumentando com as épocas mas a loss só aumenta, caracterizando overfiting
+            Por isso salvo o modelo, com a menor loss
+        """
         if valid_loss <= valid_loss_min:
             logging.info(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
+            logging.info("Validation acc: ", valid_acc)
+            
             valid_loss_min = valid_loss
-            torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")         
+            torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")
+        
+        logging.info(f"Época: {epoch+1} - Test Acc: {test_acc} - Val Acc: {valid_acc}")
     
     end_time = time.perf_counter()
     train_time = end_time-start_time
     logging.info(f"Tempo treinamento:  {train_time:.2f} seconds")
-     
-    tab_acc = {"train_acc": train_accuracies,
-               "val_acc": val_accuracies,
-               "test_acc": test_accuracies}
     
-    tab_loss = {"train_loss": train_losses,
+    epochs_values = [i for i in range(1, num_epochs)]
+    tab_acc = {
+                "epoch": epochs_values,
+                "train_acc": train_accuracies,
+               "val_acc": val_accuracies,
+               "test_acc": test_accuracies
+            }
+    
+    tab_loss = {
+                "epoch": epochs_values,
+                "train_loss": train_losses,
                "val_loss": val_losses,
                "test_loss": test_losses}
     
@@ -292,10 +303,10 @@ def model_train(experiment_id):
     logging.info(pformat(tab_loss))
     
     df_acc = pd.DataFrame(tab_acc)
-    df_acc.to_csv(f'results/experiment_{experiment_id}/acc.csv', index=False, float_format='%.2f')
+    df_acc.to_csv(f'results/experiment_{experiment_id}/hist_acc.csv', index=False, float_format='%.2f')
     
     df_loss = pd.DataFrame(tab_loss)
-    df_loss.to_csv(f'results/experiment_{experiment_id}/loss.csv', index=False, float_format='%.2f')
+    df_loss.to_csv(f'results/experiment_{experiment_id}/hist_loss.csv', index=False, float_format='%.2f')
 
     plot_acc(experiment_id, train_accuracies, test_accuracies)
     plot_loss(experiment_id, train_losses, test_losses)
@@ -332,10 +343,10 @@ def model_eval(experiment_id, train_time = -1):
     train_accuracies, _, test_accuracies = get_acc_data(experiment_id)
     train_losses, _, test_losses = get_loss_data(experiment_id)
     
-    plot_acc(experiment_id, train_accuracies, test_accuracies)
-    plot_loss(experiment_id, train_losses, test_losses)
+    # plot_acc(experiment_id, train_accuracies, test_accuracies)
+    # plot_loss(experiment_id, train_losses, test_losses)
     
-    plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
+    # plot_confusion_matrix(experiment_id, model, data, data.test_dataloader )
     
     # Calcular a acuracia de teste para o melhor modelo
     loss_fn = nn.CrossEntropyLoss()

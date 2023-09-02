@@ -39,13 +39,13 @@ def check_exp_exist(exp_id):
         return True
 
 def get_acc_data(exp_id):
-    acc_filename = f'results/experiment_{exp_id}/acc.csv'
+    acc_filename = f'results/experiment_{exp_id}/hist_acc.csv'
     data = pd.read_csv(acc_filename)
     
     return data['train_acc'], data['val_acc'], data['test_acc']
 
 def get_loss_data(exp_id):
-    loss_filename = f'results/experiment_{exp_id}/loss.csv'
+    loss_filename = f'results/experiment_{exp_id}/hist_loss.csv'
     data = pd.read_csv(loss_filename)
     
     return data['train_loss'], data['val_loss'], data['test_loss']

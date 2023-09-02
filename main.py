@@ -29,7 +29,7 @@ def main():
     
     if check_exp_exist(args.experiment_id):
         if args.train == 1:
-            logging.info(f"--------------------- Iniciando Experimento {args.experiment_id} ---------------------")
+            logging.info(f"--------------------- Iniciando Novo Treinamento {args.experiment_id} ---------------------")
             make_experiment_folder(args.experiment_id)
             model_train(args.experiment_id)
         elif args.train == 0:
