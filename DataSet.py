@@ -84,6 +84,11 @@ class DataSet():
 
         self.training_data, self.valid_data = random_split(self.training_data, [train_size, valid_size])
         
+        # tr_split_len = 100
+        # te_split_len = 10
+        # part_tr = random_split(self.training_data, [tr_split_len, len(self.training_data)-tr_split_len])[0]
+        # part_te = random_split(self.test_data, [te_split_len, len(self.test_data)-te_split_len])[0]
+        
         self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
         self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
         self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)

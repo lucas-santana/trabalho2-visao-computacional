@@ -11,7 +11,8 @@ from tqdm import tqdm
 
 from torch import nn
 # torch.set_flush_denormal(True)
-
+from torch.cuda.amp import GradScaler
+from torch.cuda.amp import autocast
 
 from torchvision import datasets, transforms
 
@@ -42,11 +43,11 @@ from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_
     https://debuggercafe.com/saving-and-loading-the-best-model-in-pytorch/
     https://pytorch.org/tutorials/beginner/saving_loading_models.html
 """
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
 
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
-    running_loss = 0.
+    running_loss = 0.0
     correct = 0
     total = 0
     
@@ -63,6 +64,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     # Itera sobre os lotes
     tic = time.perf_counter()
     counter = 0
+    scaler = GradScaler()
     for step, (X, y) in enumerate(tqdm(dataloader)):
         counter += 1
         torch.cuda.empty_cache()
@@ -71,17 +73,28 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
         X, y = X.to(device), y.to(device)
         
-        # Compute prediction and loss
-        # forward pass        
-        pred = model(X) # Faz a predição para os valores atuais dos parâmetros
-        loss = loss_fn(pred, y)  # Estima o valor da função de perda
-        
-    
         # Backpropagation
-        optimizer.zero_grad() # Limpa os gradientes
         
-        loss.backward() # Estima os gradientes
-        optimizer.step() # Atualiza os pesos da rede
+        # Runs the forward pass with autocasting.
+        with autocast():
+            # Compute prediction and loss
+            # forward pass        
+            pred = model(X) # Faz a predição para os valores atuais dos parâmetros
+            loss = loss_fn(pred, y)  # Estima o valor da função de perda
+        
+        # Scales loss.  Calls backward() on scaled loss to create scaled gradients.
+        # Backward passes under autocast are not recommended.
+        # Backward ops run in the same dtype autocast chose for corresponding forward ops.
+        scaler.scale(loss).backward()# Estima os gradientes
+        
+        # scaler.step() first unscales the gradients of the optimizer's assigned params.
+        # If these gradients do not contain infs or NaNs, optimizer.step() is then called,
+        # otherwise, optimizer.step() is skipped.
+        scaler.step(optimizer) # Atualiza os pesos da rede
+        
+        # Updates the scale for next iteration.
+        scaler.update()
+        optimizer.zero_grad() # Limpa os gradientes
         
 
         # loss é um tensor de 1 valor, por isso o item()
@@ -90,11 +103,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         total += y.size(0)
         correct += (pred.argmax(1) == y).type(torch.float).sum().item()
         
-        if step % 100 == 0:
-            
-            loss, current = loss.item(), step * len(X)
-            
-            # print(f"loss: {loss:>7f} [{current:>5d}/{size:>5d}]")
+       
         
         
         
