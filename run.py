@@ -103,10 +103,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         total += y.size(0)
         correct += (pred.argmax(1) == y).type(torch.float).sum().item()
         
-       
-        
-        
-        
+
         del pred, loss, X, y
         gc.collect()
     toc = time.perf_counter()
@@ -114,7 +111,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         
     # print(f"epoch {epoch} took {toc-tic:.2f} seconds")
                
-    train_loss = running_loss / counter
+    train_loss = running_loss / total
     accu = 100. * correct/total
     
     print('Train Loss: %.3f | Accuracy: %.3f'%(train_loss, accu))
@@ -148,7 +145,7 @@ def validation_loop(dataloader, model, loss_fn, epoch):
             total += y.size(0)
             correct += (output.argmax(1) == y).type(torch.float).sum().item()
     
-    valid_loss = valid_loss / counter
+    valid_loss = valid_loss / total
     accu = 100.*(correct/size)
 
     print('Valid Loss: %.3f | Accuracy: %.3f'%(valid_loss, accu)) 
@@ -191,7 +188,7 @@ def test_loop(dataloader, model, loss_fn, epoch=None):
 
     # test_loss divide pelo n de batches ou tam do dataset
     
-    test_loss = running_loss / counter
+    test_loss = running_loss / total
     accu = 100.*(correct/size)
 
     # LOG: mostra a acurácia e a perda
