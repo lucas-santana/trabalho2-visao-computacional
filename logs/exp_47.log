@@ -1,0 +1,210 @@
+2023-09-03 02:11:03,025 - root - INFO - --------------------- Iniciando Novo Treinamento 47 ---------------------
+2023-09-03 02:11:03,027 - root - INFO - Parametros
+2023-09-03 02:11:03,027 - root - INFO - {'batch_size': 32,
+ 'dataset': 'FASHIONMNIST',
+ 'epochs': 10,
+ 'learning_rate': 0.001,
+ 'network': 'VGG16',
+ 'num_workers': 1}
+2023-09-03 02:11:03,027 - root - INFO - Construindo dataset para a rede VGG16
+2023-09-03 02:11:03,934 - root - INFO - Construindo modelo para a rede VGG16
+2023-09-03 02:11:04,920 - root - INFO - VGG16(
+  (layer1): Sequential(
+    (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer2): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer3): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer4): Sequential(
+    (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer5): Sequential(
+    (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer6): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer7): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer8): Sequential(
+    (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer9): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer10): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer11): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer12): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer13): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=25088, out_features=4096, bias=True)
+    (2): ReLU()
+  )
+  (fc1): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=4096, out_features=4096, bias=True)
+    (2): ReLU()
+  )
+  (fc2): Sequential(
+    (0): Linear(in_features=4096, out_features=10, bias=True)
+  )
+)
+2023-09-03 02:11:04,922 - root - INFO - Iniciando treinamento
+2023-09-03 02:11:04,922 - root - INFO - Epoch 1
+-------------------------------
+2023-09-03 02:32:59,210 - root - INFO - Validation loss decreased from : inf ----> 0.5461686594486237 ----> Saving Model.......
+2023-09-03 02:32:59,210 - root - INFO - Validation acc:  79.0
+2023-09-03 02:32:59,210 - root - INFO - Época: 1 - Test Acc: 79.16 - Val Acc: 79.0
+2023-09-03 02:32:59,210 - root - INFO - Epoch 2
+-------------------------------
+2023-09-03 02:54:55,580 - root - INFO - Época: 2 - Test Acc: 81.6 - Val Acc: 81.41666666666667
+2023-09-03 02:54:55,581 - root - INFO - Epoch 3
+-------------------------------
+2023-09-03 03:16:55,968 - root - INFO - Validation loss decreased from : 0.5461686594486237 ----> 0.45454817183812457 ----> Saving Model.......
+2023-09-03 03:16:55,968 - root - INFO - Validation acc:  84.975
+2023-09-03 03:16:55,968 - root - INFO - Época: 3 - Test Acc: 84.50999999999999 - Val Acc: 84.975
+2023-09-03 03:16:55,968 - root - INFO - Epoch 4
+-------------------------------
+2023-09-03 03:38:55,461 - root - INFO - Validation loss decreased from : 0.45454817183812457 ----> 0.37732198015848795 ----> Saving Model.......
+2023-09-03 03:38:55,461 - root - INFO - Validation acc:  86.85000000000001
+2023-09-03 03:38:55,461 - root - INFO - Época: 4 - Test Acc: 87.05000000000001 - Val Acc: 86.85000000000001
+2023-09-03 03:38:55,461 - root - INFO - Epoch 5
+-------------------------------
+2023-09-03 04:00:51,871 - root - INFO - Validation loss decreased from : 0.37732198015848795 ----> 0.3426304908394813 ----> Saving Model.......
+2023-09-03 04:00:51,872 - root - INFO - Validation acc:  89.075
+2023-09-03 04:00:51,872 - root - INFO - Época: 5 - Test Acc: 88.84 - Val Acc: 89.075
+2023-09-03 04:00:51,872 - root - INFO - Epoch 6
+-------------------------------
+2023-09-03 04:22:49,448 - root - INFO - Validation loss decreased from : 0.3426304908394813 ----> 0.2991979936162631 ----> Saving Model.......
+2023-09-03 04:22:49,449 - root - INFO - Validation acc:  89.825
+2023-09-03 04:22:49,449 - root - INFO - Época: 6 - Test Acc: 89.87 - Val Acc: 89.825
+2023-09-03 04:22:49,449 - root - INFO - Epoch 7
+-------------------------------
+2023-09-03 04:47:04,442 - root - INFO - Validation loss decreased from : 0.2991979936162631 ----> 0.28618862144152324 ----> Saving Model.......
+2023-09-03 04:47:04,443 - root - INFO - Validation acc:  90.025
+2023-09-03 04:47:04,443 - root - INFO - Época: 7 - Test Acc: 90.07 - Val Acc: 90.025
+2023-09-03 04:47:04,443 - root - INFO - Epoch 8
+-------------------------------
+2023-09-03 05:17:53,492 - root - INFO - Época: 8 - Test Acc: 89.19 - Val Acc: 89.85833333333333
+2023-09-03 05:17:53,493 - root - INFO - Epoch 9
+-------------------------------
+2023-09-03 05:48:08,470 - root - INFO - Validation loss decreased from : 0.28618862144152324 ----> 0.27599839264154435 ----> Saving Model.......
+2023-09-03 05:48:08,471 - root - INFO - Validation acc:  90.675
+2023-09-03 05:48:08,471 - root - INFO - Época: 9 - Test Acc: 90.14999999999999 - Val Acc: 90.675
+2023-09-03 05:48:08,471 - root - INFO - Epoch 10
+-------------------------------
+2023-09-03 06:18:54,230 - root - INFO - Validation loss decreased from : 0.27599839264154435 ----> 0.24226456135511398 ----> Saving Model.......
+2023-09-03 06:18:54,230 - root - INFO - Validation acc:  91.59166666666667
+2023-09-03 06:18:54,230 - root - INFO - Época: 10 - Test Acc: 91.14 - Val Acc: 91.59166666666667
+2023-09-03 06:18:54,230 - root - INFO - Tempo treinamento:  14869.31 seconds
+2023-09-03 06:18:54,231 - root - INFO - Métricas
+2023-09-03 06:18:54,231 - root - INFO - ACC
+2023-09-03 06:18:54,231 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_acc': [79.16,
+              81.6,
+              84.50999999999999,
+              87.05000000000001,
+              88.84,
+              89.87,
+              90.07,
+              89.19,
+              90.14999999999999,
+              91.14],
+ 'train_acc': [63.18541666666667,
+               76.41041666666666,
+               80.72083333333333,
+               83.68958333333333,
+               86.09166666666667,
+               87.67083333333333,
+               89.0,
+               89.70625,
+               90.16458333333334,
+               91.02291666666666],
+ 'val_acc': [79.0,
+             81.41666666666667,
+             84.975,
+             86.85000000000001,
+             89.075,
+             89.825,
+             90.025,
+             89.85833333333333,
+             90.675,
+             91.59166666666667]}
+2023-09-03 06:18:54,231 - root - INFO - LOSS
+2023-09-03 06:18:54,232 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_loss': [0.5547574573812394,
+               0.5594773551526542,
+               0.4650673159299948,
+               0.38866114464049906,
+               0.34979617371917154,
+               0.3009881523851389,
+               0.29110828377663517,
+               0.29738535948645195,
+               0.2846658339801307,
+               0.24761547660008787],
+ 'train_loss': [1.0829129303097724,
+                0.6149188270866871,
+                0.5216025072236856,
+                0.45137362350523474,
+                0.39099080324669677,
+                0.3502055860708157,
+                0.3159369891534249,
+                0.2969720080258946,
+                0.2792731777901451,
+                0.25852898485337694],
+ 'val_loss': [0.5461686594486237,
+              0.5530833110014598,
+              0.45454817183812457,
+              0.37732198015848795,
+              0.3426304908394813,
+              0.2991979936162631,
+              0.28618862144152324,
+              0.2942193132241567,
+              0.27599839264154435,
+              0.24226456135511398]}
+2023-09-03 06:19:16,887 - root - INFO - Rodando evaluation
+2023-09-03 06:19:16,889 - root - INFO - Construindo dataset para a rede VGG16

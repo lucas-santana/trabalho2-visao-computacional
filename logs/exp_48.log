@@ -1,0 +1,212 @@
+2023-09-03 06:19:33,394 - root - INFO - --------------------- Iniciando Novo Treinamento 48 ---------------------
+2023-09-03 06:19:33,395 - root - INFO - Parametros
+2023-09-03 06:19:33,396 - root - INFO - {'batch_size': 64,
+ 'dataset': 'FASHIONMNIST',
+ 'epochs': 10,
+ 'learning_rate': 0.001,
+ 'network': 'VGG16',
+ 'num_workers': 1}
+2023-09-03 06:19:33,396 - root - INFO - Construindo dataset para a rede VGG16
+2023-09-03 06:19:35,221 - root - INFO - Construindo modelo para a rede VGG16
+2023-09-03 06:19:36,708 - root - INFO - VGG16(
+  (layer1): Sequential(
+    (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer2): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer3): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer4): Sequential(
+    (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer5): Sequential(
+    (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer6): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer7): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer8): Sequential(
+    (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer9): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer10): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer11): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer12): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer13): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=25088, out_features=4096, bias=True)
+    (2): ReLU()
+  )
+  (fc1): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=4096, out_features=4096, bias=True)
+    (2): ReLU()
+  )
+  (fc2): Sequential(
+    (0): Linear(in_features=4096, out_features=10, bias=True)
+  )
+)
+2023-09-03 06:19:36,711 - root - INFO - Iniciando treinamento
+2023-09-03 06:19:36,712 - root - INFO - Epoch 1
+-------------------------------
+2023-09-03 06:39:10,846 - root - INFO - Validation loss decreased from : inf ----> 0.5780048863367832 ----> Saving Model.......
+2023-09-03 06:39:10,846 - root - INFO - Validation acc:  80.65
+2023-09-03 06:39:10,847 - root - INFO - Época: 1 - Test Acc: 80.30000000000001 - Val Acc: 80.65
+2023-09-03 06:39:10,847 - root - INFO - Epoch 2
+-------------------------------
+2023-09-03 06:58:34,128 - root - INFO - Validation loss decreased from : 0.5780048863367832 ----> 0.47248505658291756 ----> Saving Model.......
+2023-09-03 06:58:34,129 - root - INFO - Validation acc:  82.525
+2023-09-03 06:58:34,129 - root - INFO - Época: 2 - Test Acc: 82.49 - Val Acc: 82.525
+2023-09-03 06:58:34,129 - root - INFO - Epoch 3
+-------------------------------
+2023-09-03 07:17:58,917 - root - INFO - Validation loss decreased from : 0.47248505658291756 ----> 0.4444628193023357 ----> Saving Model.......
+2023-09-03 07:17:58,918 - root - INFO - Validation acc:  85.44166666666668
+2023-09-03 07:17:58,918 - root - INFO - Época: 3 - Test Acc: 84.7 - Val Acc: 85.44166666666668
+2023-09-03 07:17:58,918 - root - INFO - Epoch 4
+-------------------------------
+2023-09-03 07:37:24,201 - root - INFO - Validation loss decreased from : 0.4444628193023357 ----> 0.43458809465804 ----> Saving Model.......
+2023-09-03 07:37:24,202 - root - INFO - Validation acc:  83.55
+2023-09-03 07:37:24,202 - root - INFO - Época: 4 - Test Acc: 82.77 - Val Acc: 83.55
+2023-09-03 07:37:24,202 - root - INFO - Epoch 5
+-------------------------------
+2023-09-03 07:56:49,414 - root - INFO - Validation loss decreased from : 0.43458809465804 ----> 0.41087208291951643 ----> Saving Model.......
+2023-09-03 07:56:49,414 - root - INFO - Validation acc:  88.375
+2023-09-03 07:56:49,415 - root - INFO - Época: 5 - Test Acc: 88.18 - Val Acc: 88.375
+2023-09-03 07:56:49,415 - root - INFO - Epoch 6
+-------------------------------
+2023-09-03 08:16:14,812 - root - INFO - Validation loss decreased from : 0.41087208291951643 ----> 0.3876896152629497 ----> Saving Model.......
+2023-09-03 08:16:14,813 - root - INFO - Validation acc:  87.55
+2023-09-03 08:16:14,813 - root - INFO - Época: 6 - Test Acc: 87.5 - Val Acc: 87.55
+2023-09-03 08:16:14,813 - root - INFO - Epoch 7
+-------------------------------
+2023-09-03 08:35:40,053 - root - INFO - Validation loss decreased from : 0.3876896152629497 ----> 0.3325988692330553 ----> Saving Model.......
+2023-09-03 08:35:40,053 - root - INFO - Validation acc:  89.70833333333333
+2023-09-03 08:35:40,054 - root - INFO - Época: 7 - Test Acc: 89.36 - Val Acc: 89.70833333333333
+2023-09-03 08:35:40,054 - root - INFO - Epoch 8
+-------------------------------
+2023-09-03 08:55:04,096 - root - INFO - Validation loss decreased from : 0.3325988692330553 ----> 0.32800622435009225 ----> Saving Model.......
+2023-09-03 08:55:04,096 - root - INFO - Validation acc:  89.3
+2023-09-03 08:55:04,097 - root - INFO - Época: 8 - Test Acc: 88.96 - Val Acc: 89.3
+2023-09-03 08:55:04,097 - root - INFO - Epoch 9
+-------------------------------
+2023-09-03 09:14:29,800 - root - INFO - Validation loss decreased from : 0.32800622435009225 ----> 0.3219158482995439 ----> Saving Model.......
+2023-09-03 09:14:29,801 - root - INFO - Validation acc:  90.25833333333333
+2023-09-03 09:14:29,801 - root - INFO - Época: 9 - Test Acc: 89.95 - Val Acc: 90.25833333333333
+2023-09-03 09:14:29,801 - root - INFO - Epoch 10
+-------------------------------
+2023-09-03 09:33:53,970 - root - INFO - Validation loss decreased from : 0.3219158482995439 ----> 0.3095017376732319 ----> Saving Model.......
+2023-09-03 09:33:53,970 - root - INFO - Validation acc:  90.78333333333333
+2023-09-03 09:33:53,971 - root - INFO - Época: 10 - Test Acc: 90.63 - Val Acc: 90.78333333333333
+2023-09-03 09:33:53,971 - root - INFO - Tempo treinamento:  11657.26 seconds
+2023-09-03 09:33:53,971 - root - INFO - Métricas
+2023-09-03 09:33:53,971 - root - INFO - ACC
+2023-09-03 09:33:53,971 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_acc': [80.30000000000001,
+              82.49,
+              84.7,
+              82.77,
+              88.18,
+              87.5,
+              89.36,
+              88.96,
+              89.95,
+              90.63],
+ 'train_acc': [60.99583333333333,
+               77.61458333333333,
+               80.6125,
+               83.27083333333333,
+               85.35208333333334,
+               86.83333333333333,
+               88.06458333333333,
+               88.98125,
+               89.81458333333333,
+               90.40416666666667],
+ 'val_acc': [80.65,
+             82.525,
+             85.44166666666668,
+             83.55,
+             88.375,
+             87.55,
+             89.70833333333333,
+             89.3,
+             90.25833333333333,
+             90.78333333333333]}
+2023-09-03 09:33:53,972 - root - INFO - LOSS
+2023-09-03 09:33:53,972 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_loss': [0.5830372015761721,
+               0.47515500275192746,
+               0.4511070777276519,
+               0.442419953406996,
+               0.4111990151321812,
+               0.3911546571239544,
+               0.3306088721866061,
+               0.3278001117858158,
+               0.3258252862342604,
+               0.3121854871701283],
+ 'train_loss': [1.1636844311157863,
+                0.5866874684890111,
+                0.5220309325456619,
+                0.45318479686975477,
+                0.3992246783177058,
+                0.3660182273983955,
+                0.33256946758925915,
+                0.30856545420487724,
+                0.28708116604884465,
+                0.2706505880256494],
+ 'val_loss': [0.5780048863367832,
+              0.47248505658291756,
+              0.4444628193023357,
+              0.43458809465804,
+              0.41087208291951643,
+              0.3876896152629497,
+              0.3325988692330553,
+              0.32800622435009225,
+              0.3219158482995439,
+              0.3095017376732319]}
