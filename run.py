@@ -306,6 +306,7 @@ def model_train(experiment_id):
         logging.info(f"Época {epoch+1}/{num_epochs}")
         logging.info(f"loss: {train_loss} - accuracy: {train_acc} - val_loss: {valid_loss} - val_accuracy: {valid_acc}")
         logging.info(f"[Test] ---> accuracy: {test_acc} - loss: {test_loss}")
+        logging.info(f"test acc from best model : {best_model_test_acc}")
         
         print(f"test acc from best model : {best_model_test_acc}")
     
