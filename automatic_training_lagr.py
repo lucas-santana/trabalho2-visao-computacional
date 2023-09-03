@@ -4,7 +4,7 @@ import subprocess
 from util import check_exp_exist
 
 
-experiments_id = [78,79,80,76,77]
+experiments_id = [41,42,43,44,49,50,51]
 
 script_name = open("main.py")
 script = script_name.read()
