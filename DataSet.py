@@ -50,7 +50,7 @@ class DataSet():
             """
                 The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes, with 6000 images per class.
             """
-            self.gray_scale = False # 32x32x3
+            self.gray_scale = True # 32x32x3
             self.dataset_name = 'CIFAR10'
             
             # transform = transforms.Compose([
@@ -59,6 +59,11 @@ class DataSet():
             #                             #     (0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616)
             #                             # )
             #                         ])
+            
+            transform = transforms.Compose([
+                                transforms.Grayscale(num_output_channels=1),
+                                transforms.Resize((input_size, input_size)),
+                                transforms.ToTensor()])
             
             self.training_data = datasets.CIFAR10(
                         root="data",
