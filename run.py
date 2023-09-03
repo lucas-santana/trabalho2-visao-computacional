@@ -25,6 +25,7 @@ from DatasetTypeEnum import DataSetType
 from networks.LeNet5 import LeNet5
 from networks.AlexNet import AlexNet
 from networks.VGG16 import VGG16
+from networks.VGG11 import VGG11
 
 from plot import plot_loss, plot_acc, plot_confusion_matrix, plot_samples, save_plots
 
@@ -199,10 +200,27 @@ def build_data(network, dataset, batch_size, num_workers=0):
     elif network == Networks.VGG16.value:
         logging.info(f"Construindo dataset para a rede VGG16")
         data = DataSet(dataset, batch_size=batch_size, input_size=224, num_workers=num_workers)
+    elif network == Networks.VGG11.value:
+        logging.info(f"Construindo dataset para a rede VGG11")
+        data = DataSet(dataset, batch_size=batch_size, input_size=224, num_workers=num_workers)
     else:
         raise Exception("Network not supported: ", network)
     
     return data
+
+def get_model(network, num_classes, gray_scale):
+    if network == Networks.LENET5.value:
+        model = LeNet5(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    elif network == Networks.ALEXNET.value:
+        model = AlexNet(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    elif network == Networks.VGG16.value:
+        model = VGG16(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    elif network == Networks.VGG11.value:
+        model = VGG11(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    else:
+        raise Exception("Network not supported: ", network)
+    
+    return model
 
 def model_train(experiment_id):
     """
@@ -220,22 +238,11 @@ def model_train(experiment_id):
     num_epochs = parameters['epochs']
     num_workers = parameters['num_workers']
     
-    
     data = build_data(network, dataset, batch_size = batch_size, num_workers=num_workers)
     
     plot_samples(experiment_id, data.train_dataloader)
     
-    if network == Networks.LENET5.value:
-        logging.info(f"Construindo modelo para a rede LENET5")
-        model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
-    elif network == Networks.ALEXNET.value:
-        logging.info(f"Construindo modelo para a rede ALEXNET")
-        model = AlexNet(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
-    elif network == Networks.VGG16.value:
-        logging.info(f"Construindo modelo para a rede VGG16")
-        model = VGG16(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
-    else:
-        raise Exception("Network not supported: ", network)
+    model = get_model(network, data.num_classes, data.gray_scale)
     
     print(f"Model structure: {model}\n\n")
     logging.info(pformat(model))
@@ -343,6 +350,7 @@ def model_train(experiment_id):
     
     # model_eval(experiment_id, train_time=train_time)
 
+
 def model_eval(experiment_id, train_time = -1):
     """
         Precisa que modelo esteja salvo para realizar o teste
@@ -359,15 +367,7 @@ def model_eval(experiment_id, train_time = -1):
     
     data = build_data(network, dataset, batch_size = batch_size, num_workers=num_workers)
         
-    if network == Networks.LENET5.value:
-        model = LeNet5(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
-    elif network == Networks.ALEXNET.value:
-        model = AlexNet(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
-    elif network == Networks.VGG16.value:
-        model = VGG16(num_classes=data.num_classes, gray_scale=data.gray_scale).to(device)
-    else:
-        raise Exception("Network not supported: ", network)
-    
+    model = get_model(network, data.num_classes, data.gray_scale)
     model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
 
     # carregar arquivo csv para plotar grafico acurácias
