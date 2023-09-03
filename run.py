@@ -49,10 +49,9 @@ print(f"Using {device} device")
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     running_loss = 0.0
     correct = 0
-    total = 0
     
     # Obtém o tamanho do dataset
-    size = len(dataloader.dataset)
+    dataset_size = len(dataloader.dataset)
     
     # Obtém o número de lotes (iterações)   
     num_batches = len(dataloader)
@@ -63,10 +62,9 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
 
     # Itera sobre os lotes
     tic = time.perf_counter()
-    counter = 0
     scaler = GradScaler()
+    
     for step, (X, y) in enumerate(tqdm(dataloader)):
-        counter += 1
         torch.cuda.empty_cache()
         
         
@@ -96,23 +94,24 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         scaler.update()
         optimizer.zero_grad() # Limpa os gradientes
         
-
         # loss é um tensor de 1 valor, por isso o item()
-        running_loss += loss.item()
-
-        total += y.size(0)
-        correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+        # loss.item() contains the loss of the entire mini-batch,  
+        # It’s because the loss given loss functions is divided by the number of elements 
+        # i.e. the reduction parameter is mean by default(divided by the batch size). 
+        # That’s why loss.item() is multiplied by the batch size, given by inputs.size(0), while calculating running_loss
         
+        running_loss += loss.item() * X.size(0)
+
+        correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
         del pred, loss, X, y
         gc.collect()
     toc = time.perf_counter()
         
-        
-    # print(f"epoch {epoch} took {toc-tic:.2f} seconds")
-               
-    train_loss = running_loss / total
-    accu = 100. * correct/total
+    # É mais correto multiplicar pelo tamaho do batch e depois dividir pelo numer de amostras do que acumular e dividir pelo num_batches, 
+    # levando em conta que nem todos batches tem o mesmo tamanho
+    train_loss = running_loss / dataset_size
+    accu = 100. * correct/dataset_size
     
     print('Train Loss: %.3f | Accuracy: %.3f'%(train_loss, accu))
     return train_loss, accu
@@ -120,10 +119,9 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
 def validation_loop(dataloader, model, loss_fn, epoch):
     valid_loss = 0.0
     correct = 0
-    total = 0
 
     # Obtém o tamanho do dataset
-    size = len(dataloader.dataset)
+    dataset_size = len(dataloader.dataset)
 
     # Obtém o número de lotes (iterações)
     num_batches = len(dataloader)
@@ -131,22 +129,19 @@ def validation_loop(dataloader, model, loss_fn, epoch):
     model.eval()
     with torch.no_grad():
         
-        counter = 0
+
         for X, y in dataloader:
-            counter += 1
-            
+
             X, y = X.to(device), y.to(device)
 
             output = model(X)
 
-            valid_loss += loss_fn(output, y).item()
+            valid_loss += loss_fn(output, y).item()* X.size(0)
 
-            
-            total += y.size(0)
             correct += (output.argmax(1) == y).type(torch.float).sum().item()
     
-    valid_loss = valid_loss / total
-    accu = 100.*(correct/size)
+    valid_loss = valid_loss / dataset_size
+    accu = 100.*(correct/dataset_size)
 
     print('Valid Loss: %.3f | Accuracy: %.3f'%(valid_loss, accu)) 
 
@@ -155,10 +150,9 @@ def validation_loop(dataloader, model, loss_fn, epoch):
 def test_loop(dataloader, model, loss_fn, epoch=None):    
     running_loss = 0
     correct = 0
-    total = 0
 
    # Obtém o tamanho do dataset
-    size = len(dataloader.dataset)
+    dataset_size = len(dataloader.dataset)
 
     # Obtém o número de lotes (iterações)
     num_batches = len(dataloader)
@@ -171,25 +165,24 @@ def test_loop(dataloader, model, loss_fn, epoch=None):
     # also serves to reduce unnecessary gradient computations and memory usage for tensors with requires_grad=True
     # Desabilita o cálculo do gradiente
     with torch.no_grad():
-        counter = 0
+        
         # Itera sobre o conjunto de teste
         for X, y in dataloader:
-            counter += 1
+            
             # transforma as entradas no formato do dispositivo utilizado (CPU ou GPU)
             X, y = X.to(device), y.to(device)
             # Realiza a predição
             pred = model(X)
 
             # Calcula a perda
-            running_loss += loss_fn(pred, y).item()
+            running_loss += loss_fn(pred, y).item()* X.size(0)
 
-            total += y.size(0)
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
 
     # test_loss divide pelo n de batches ou tam do dataset
     
-    test_loss = running_loss / total
-    accu = 100.*(correct/size)
+    test_loss = running_loss / dataset_size
+    accu = 100.*(correct/dataset_size)
 
     # LOG: mostra a acurácia e a perda
     print('Test Loss: %.3f | Accuracy: %.3f'%(test_loss, accu)) 
