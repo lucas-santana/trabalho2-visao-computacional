@@ -262,7 +262,7 @@ def model_train(experiment_id):
 
     for epoch in range(num_epochs):
         logging.info(f"Epoch {epoch+1}\n-------------------------------")
-        print(f"Epoch {epoch+1}\n-------------------------------")
+        print(f"Epoch {epoch+1}/{num_epochs}\n-------------------------------")
         
         train_loss, train_acc = train_loop(data.train_dataloader, model, loss_fn, optimizer, epoch)
         train_losses.append(train_loss)
