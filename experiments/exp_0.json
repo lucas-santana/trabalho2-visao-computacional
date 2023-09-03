@@ -1,7 +1,7 @@
 {
     "network": "VGG16",
     "dataset": "FASHIONMNIST",
-    "epochs": 10,
+    "epochs": 5,
     "batch_size": 8,
     "learning_rate": 0.001,
     "num_workers": 1

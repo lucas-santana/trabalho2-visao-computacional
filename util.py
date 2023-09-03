@@ -39,18 +39,42 @@ def check_exp_exist(exp_id):
         return True
 
 def get_acc_data(exp_id):
+    """Ler o arquivo do histórico de acurácias
+
+    Args:
+        exp_id (int): id do experimento
+
+    Returns:
+        list: listas de loss do treino, validação e test
+    """
     acc_filename = f'results/experiment_{exp_id}/hist_acc.csv'
     data = pd.read_csv(acc_filename)
     
     return data['train_acc'], data['val_acc'], data['test_acc']
 
 def get_loss_data(exp_id):
+    """Ler o arquivo de histório da loss
+
+    Args:
+        exp_id (int): id do experimento
+
+    Returns:
+        list: listas de loss do treino, validação e test
+    """
     loss_filename = f'results/experiment_{exp_id}/hist_loss.csv'
     data = pd.read_csv(loss_filename)
     
     return data['train_loss'], data['val_loss'], data['test_loss']
 
 def save_acc_result(exp_id, test_acc, val_acc, train_time=-1):
+    """Salvar acurácia de teste, validação e tempo de treinamento no arquivo acc_experiments.csv
+
+    Args:
+        exp_id (_type_): _description_
+        test_acc (_type_): _description_
+        val_acc (_type_): _description_
+        train_time (int, optional): _description_. Defaults to -1.
+    """
     acc_file = f'results/acc_experiments.csv'
         
     tab_acc = {"exp_id": [exp_id],

@@ -39,6 +39,7 @@ from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_
     https://www.youtube.com/watch?v=doT7koXt9vw
     https://machinelearningmastery.com/using-learning-rate-schedule-in-pytorch-training/
     https://debuggercafe.com/saving-and-loading-the-best-model-in-pytorch/
+    https://pytorch.org/tutorials/beginner/saving_loading_models.html
 """
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
@@ -204,7 +205,9 @@ def build_data(network, dataset, batch_size, num_workers=0):
     return data
 
 def model_train(experiment_id):
-    
+    """
+        
+    """
     parameters = parse_exp_json(experiment_id)
     
     logging.info("Parametros")
@@ -246,14 +249,17 @@ def model_train(experiment_id):
     val_losses = []
     val_accuracies = []
     
-    
     test_losses = []
     test_accuracies = []
 
+    # Salvar as méticas de acordo com o modelo com a menor loss
     valid_loss_min = np.Inf
+    best_model_test_acc = 0
+    best_model_val_acc = 0
     
     logging.info("Iniciando treinamento")
     start_time = time.perf_counter()
+
     for epoch in range(num_epochs):
         logging.info(f"Epoch {epoch+1}\n-------------------------------")
         print(f"Epoch {epoch+1}\n-------------------------------")
@@ -277,16 +283,22 @@ def model_train(experiment_id):
         if valid_loss <= valid_loss_min:
             logging.info(f"Validation loss decreased from : {valid_loss_min} ----> {valid_loss} ----> Saving Model.......")
             logging.info(f"Validation acc:  {valid_acc}")
+            logging.info(f"Best Test acc from {best_model_test_acc} ----> {test_acc}")
             
             valid_loss_min = valid_loss
+            best_model_test_acc = test_acc
+            best_model_val_acc = valid_acc
             # torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")
         
-        logging.info(f"Época: {epoch+1} - Test Acc: {test_acc} - Val Acc: {valid_acc}")
+        logging.info(f"Época {epoch+1}/{num_epochs}")
+        logging.info(f"loss: {train_loss} - accuracy: {train_acc} - val_loss: {valid_loss} - val_accuracy: {valid_acc}")
+        logging.info(f"[Test] ---> accuracy: {test_acc} - loss: {test_loss}")
+        
+        print(f"test acc from best model : {best_model_test_acc}")
     
     end_time = time.perf_counter()
-    train_time = end_time-start_time
-    logging.info(f"Tempo treinamento:  {train_time:.2f} seconds")
-    
+    train_time = end_time - start_time
+
     epochs_values = [i+1 for i in range(0, num_epochs)]
     tab_acc = {
                 "epoch": epochs_values,
@@ -299,12 +311,15 @@ def model_train(experiment_id):
                 "epoch": epochs_values,
                 "train_loss": train_losses,
                "val_loss": val_losses,
-               "test_loss": test_losses}
+               "test_loss": test_losses
+            }
     
+    logging.info(f"Tempo treinamento:  {train_time:.2f} seconds")
+    logging.info(f"Menor loss: {valid_loss_min}")
+    logging.info(f"Acurácia de teste do melhor modelo: {best_model_test_acc}")
     logging.info("Métricas")
     logging.info("ACC")
     logging.info(pformat(tab_acc))
-    
     logging.info("LOSS")
     logging.info(pformat(tab_loss))
     
@@ -314,20 +329,19 @@ def model_train(experiment_id):
     df_loss = pd.DataFrame(tab_loss)
     df_loss.to_csv(f'results/experiment_{experiment_id}/hist_loss.csv', index=False, float_format='%.2f')
 
-    # plot_acc(experiment_id, train_accuracies, val_accuracies)
-    # plot_loss(experiment_id, train_losses, val_losses)
-    
+    plot_acc(experiment_id, train_accuracies, val_accuracies)
+    plot_loss(experiment_id, train_losses, val_losses)
     save_plots(experiment_id, train_accuracies, val_accuracies, train_losses, val_losses)
     
-    # salvar as predições
     save_pred(experiment_id, model, data.test_dataloader)
     
-    # ler arquivo predicoes
     y_pred, y_true = get_pred(experiment_id)
     
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
     
-    model_eval(experiment_id, train_time=train_time)
+    save_acc_result(experiment_id, best_model_test_acc, best_model_val_acc, train_time)
+    
+    # model_eval(experiment_id, train_time=train_time)
 
 def model_eval(experiment_id, train_time = -1):
     """
@@ -375,13 +389,18 @@ def model_eval(experiment_id, train_time = -1):
     save_acc_result(experiment_id, test_acc, val_acc, train_time)
     
 def get_pred(exp_id):
-
+    """
+        ler arquivo predicoes predictions.csv
+    """
     predictions_filename = f'results/experiment_{exp_id}/predictions.csv'
     data = pd.read_csv(predictions_filename)
     
     return data['target'], data['prediction']
 
 def save_pred(experiment_id, model, dataloader):
+    """
+        Salvar predições no arquivo predictions.csv
+    """
     y_pred = []
     y_true = []
 

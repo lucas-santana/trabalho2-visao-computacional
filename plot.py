@@ -15,12 +15,10 @@ def plot_acc(experiment_id, train_accu, eval_accu, title="Train vs Test Accuracy
 
     plt.plot(train_accu,'-o')
     plt.plot(eval_accu,'-o')
-    plt.xlabel('epoch')
-    plt.ylabel('accuracy')
-    plt.legend(['Train','Test'])
+    plt.xlabel('Época')
+    plt.ylabel('Acurácia')
+    plt.legend(['Treino','Teste'])
     plt.title(title)
-
-    # plt.show()
     
     f.savefig(f'results/experiment_{experiment_id}/acc.pdf')
     
@@ -29,12 +27,10 @@ def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Los
 
     plt.plot(train_losses,'-o')
     plt.plot(eval_losses,'-o')
-    plt.xlabel('epoch')
-    plt.ylabel('losses')
-    plt.legend(['Train','Test'])
+    plt.xlabel('Época')
+    plt.ylabel('Perda')
+    plt.legend(['Treino','Teste'])
     plt.title(title)
-
-    # plt.show()
     
     f.savefig(f'results/experiment_{experiment_id}/loss.pdf')
     
@@ -54,7 +50,7 @@ def plot_confusion_matrix(experiment_id, data, y_pred, y_true):
     plt.figure(figsize = (12, 7))
     sn.heatmap(df_cm, annot=True, cbar=None, cmap="OrRd",fmt="d")
     
-    plt.title("Confusion Matrix"), plt.tight_layout()
+    plt.title("Matriz de confusão"), plt.tight_layout()
 
     plt.ylabel("True Class"), 
     plt.xlabel("Predicted Class")
@@ -72,20 +68,20 @@ def plot_samples(experiment_id, dataloader):
 
 def save_plots(experiment_id, train_acc, valid_acc, train_loss, valid_loss):
     """
-    Function to save the loss and accuracy plots to disk.
+        Salvar graficos de loss e acurácia
     """
     # accuracy plots
     plt.figure(figsize=(10, 7))
     plt.plot(
         train_acc, color='green', linestyle='-', 
-        label='train accuracy'
+        label='Acurácia de Treino'
     )
     plt.plot(
         valid_acc, color='blue', linestyle='-', 
-        label='validataion accuracy'
+        label='Acurácia de validação'
     )
-    plt.xlabel('Epochs')
-    plt.ylabel('Accuracy')
+    plt.xlabel('Época')
+    plt.ylabel('Acurácia')
     plt.legend()
     plt.savefig(f'results/experiment_{experiment_id}/train_val_acc.pdf')
     
@@ -93,14 +89,14 @@ def save_plots(experiment_id, train_acc, valid_acc, train_loss, valid_loss):
     plt.figure(figsize=(10, 7))
     plt.plot(
         train_loss, color='orange', linestyle='-', 
-        label='train loss'
+        label='Loss de Treino'
     )
     plt.plot(
         valid_loss, color='red', linestyle='-', 
-        label='validataion loss'
+        label='Perda de Validação'
     )
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
+    plt.xlabel('Época')
+    plt.ylabel('Perda')
     plt.legend()
     
     plt.savefig(f'results/experiment_{experiment_id}/train_val_loss.pdf')
