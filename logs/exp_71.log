@@ -62,3 +62,12 @@
 2023-09-04 01:38:36,474 - root - INFO - Iniciando treinamento
 2023-09-04 01:38:36,474 - root - INFO - Epoch 1
 -------------------------------
+2023-09-04 01:42:26,235 - root - INFO - Validation loss decreased from : inf ----> 1.3443198501586915 ----> Saving Model.......
+2023-09-04 01:42:26,235 - root - INFO - Validation acc:  52.87
+2023-09-04 01:42:26,235 - root - INFO - Best Test acc from 0 ----> 53.269999999999996
+2023-09-04 01:42:26,235 - root - INFO - Época 1/10
+2023-09-04 01:42:26,235 - root - INFO - loss: 1.810281413078308 - accuracy: 33.23 - val_loss: 1.3443198501586915 - val_accuracy: 52.87
+2023-09-04 01:42:26,235 - root - INFO - [Test] ---> accuracy: 53.269999999999996 - loss: 1.3456522954940795
+2023-09-04 01:42:26,235 - root - INFO - test acc from best model : 53.269999999999996
+2023-09-04 01:42:26,235 - root - INFO - Epoch 2
+-------------------------------
