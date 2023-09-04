@@ -1,0 +1,302 @@
+2023-09-03 20:31:29,400 - root - INFO - --------------------- Iniciando Novo Treinamento 49 ---------------------
+2023-09-03 20:31:29,400 - root - INFO - Parametros
+2023-09-03 20:31:29,400 - root - INFO - {'batch_size': 32,
+ 'dataset': 'CIFAR10',
+ 'epochs': 10,
+ 'learning_rate': 0.1,
+ 'network': 'VGG16',
+ 'num_workers': 1}
+2023-09-03 20:31:29,400 - root - INFO - Construindo dataset para a rede VGG16
+2023-09-03 20:31:31,333 - root - INFO - VGG16(
+  (layer1): Sequential(
+    (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer2): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer3): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer4): Sequential(
+    (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer5): Sequential(
+    (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer6): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer7): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer8): Sequential(
+    (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer9): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer10): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer11): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer12): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer13): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Sequential(
+    (0): Linear(in_features=25088, out_features=4096, bias=True)
+    (1): ReLU()
+    (2): Dropout(p=0.5, inplace=False)
+  )
+  (fc1): Sequential(
+    (0): Linear(in_features=4096, out_features=4096, bias=True)
+    (1): ReLU()
+    (2): Dropout(p=0.5, inplace=False)
+  )
+  (fc2): Sequential(
+    (0): Linear(in_features=4096, out_features=10, bias=True)
+  )
+)
+2023-09-03 20:31:31,334 - root - INFO - Iniciando treinamento
+2023-09-03 20:31:31,334 - root - INFO - Epoch 1
+-------------------------------
+2023-09-03 20:36:33,034 - root - INFO - Validation loss decreased from : inf ----> 4828002.1056 ----> Saving Model.......
+2023-09-03 20:36:33,035 - root - INFO - Validation acc:  10.2
+2023-09-03 20:36:33,035 - root - INFO - Best Test acc from 0 ----> 10.0
+2023-09-03 20:36:33,035 - root - INFO - Época 1/10
+2023-09-03 20:36:33,035 - root - INFO - loss: nan - accuracy: 9.9025 - val_loss: 4828002.1056 - val_accuracy: 10.2
+2023-09-03 20:36:33,035 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4974832.6456
+2023-09-03 20:36:33,035 - root - INFO - test acc from best model : 10.0
+2023-09-03 20:36:33,035 - root - INFO - Epoch 2
+-------------------------------
+2023-09-03 20:41:40,508 - root - INFO - Época 2/10
+2023-09-03 20:41:40,509 - root - INFO - loss: nan - accuracy: 9.93 - val_loss: 4844606.4088 - val_accuracy: 10.2
+2023-09-03 20:41:40,509 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4993864.9964
+2023-09-03 20:41:40,509 - root - INFO - test acc from best model : 10.0
+2023-09-03 20:41:40,509 - root - INFO - Epoch 3
+-------------------------------
+2023-09-03 20:46:48,117 - root - INFO - Validation loss decreased from : 4828002.1056 ----> 4458996.5896 ----> Saving Model.......
+2023-09-03 20:46:48,118 - root - INFO - Validation acc:  10.2
+2023-09-03 20:46:48,118 - root - INFO - Best Test acc from 10.0 ----> 10.0
+2023-09-03 20:46:48,118 - root - INFO - Época 3/10
+2023-09-03 20:46:48,118 - root - INFO - loss: nan - accuracy: 10.0425 - val_loss: 4458996.5896 - val_accuracy: 10.2
+2023-09-03 20:46:48,118 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4579860.4752
+2023-09-03 20:46:48,118 - root - INFO - test acc from best model : 10.0
+2023-09-03 20:46:48,118 - root - INFO - Epoch 4
+-------------------------------
+2023-09-03 20:51:56,229 - root - INFO - Validation loss decreased from : 4458996.5896 ----> 4290862.7656 ----> Saving Model.......
+2023-09-03 20:51:56,229 - root - INFO - Validation acc:  10.2
+2023-09-03 20:51:56,229 - root - INFO - Best Test acc from 10.0 ----> 10.0
+2023-09-03 20:51:56,229 - root - INFO - Época 4/10
+2023-09-03 20:51:56,229 - root - INFO - loss: nan - accuracy: 9.925 - val_loss: 4290862.7656 - val_accuracy: 10.2
+2023-09-03 20:51:56,229 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4401578.3228
+2023-09-03 20:51:56,229 - root - INFO - test acc from best model : 10.0
+2023-09-03 20:51:56,229 - root - INFO - Epoch 5
+-------------------------------
+2023-09-03 20:57:04,144 - root - INFO - Época 5/10
+2023-09-03 20:57:04,145 - root - INFO - loss: nan - accuracy: 9.9775 - val_loss: 4440344.286 - val_accuracy: 10.2
+2023-09-03 20:57:04,145 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4560730.6872
+2023-09-03 20:57:04,145 - root - INFO - test acc from best model : 10.0
+2023-09-03 20:57:04,145 - root - INFO - Epoch 6
+-------------------------------
+2023-09-03 21:02:11,634 - root - INFO - Época 6/10
+2023-09-03 21:02:11,634 - root - INFO - loss: nan - accuracy: 9.9375 - val_loss: 4621334.5264 - val_accuracy: 10.2
+2023-09-03 21:02:11,634 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4759174.2424
+2023-09-03 21:02:11,634 - root - INFO - test acc from best model : 10.0
+2023-09-03 21:02:11,634 - root - INFO - Epoch 7
+-------------------------------
+2023-09-03 21:07:19,492 - root - INFO - Época 7/10
+2023-09-03 21:07:19,492 - root - INFO - loss: nan - accuracy: 9.9075 - val_loss: 4384402.416 - val_accuracy: 10.2
+2023-09-03 21:07:19,492 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4500100.3932
+2023-09-03 21:07:19,492 - root - INFO - test acc from best model : 10.0
+2023-09-03 21:07:19,492 - root - INFO - Epoch 8
+-------------------------------
+2023-09-03 21:12:26,904 - root - INFO - Época 8/10
+2023-09-03 21:12:26,904 - root - INFO - loss: nan - accuracy: 9.9525 - val_loss: 4668722.7424 - val_accuracy: 10.2
+2023-09-03 21:12:26,904 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4805537.1096
+2023-09-03 21:12:26,904 - root - INFO - test acc from best model : 10.0
+2023-09-03 21:12:26,904 - root - INFO - Epoch 9
+-------------------------------
+2023-09-03 21:17:34,284 - root - INFO - Época 9/10
+2023-09-03 21:17:34,284 - root - INFO - loss: nan - accuracy: 9.935 - val_loss: 4347003.4664 - val_accuracy: 10.2
+2023-09-03 21:17:34,284 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4465005.306
+2023-09-03 21:17:34,284 - root - INFO - test acc from best model : 10.0
+2023-09-03 21:17:34,284 - root - INFO - Epoch 10
+-------------------------------
+2023-09-03 21:22:41,643 - root - INFO - Época 10/10
+2023-09-03 21:22:41,644 - root - INFO - loss: nan - accuracy: 9.8925 - val_loss: 4622226.2224 - val_accuracy: 10.2
+2023-09-03 21:22:41,644 - root - INFO - [Test] ---> accuracy: 10.0 - loss: 4755701.8216
+2023-09-03 21:22:41,644 - root - INFO - test acc from best model : 10.0
+2023-09-03 21:22:41,644 - root - INFO - Tempo treinamento:  3070.31 seconds
+2023-09-03 21:22:41,644 - root - INFO - Menor loss: 4290862.7656
+2023-09-03 21:22:41,644 - root - INFO - Acurácia de teste do melhor modelo: 10.0
+2023-09-03 21:22:41,644 - root - INFO - Métricas
+2023-09-03 21:22:41,644 - root - INFO - ACC
+2023-09-03 21:22:41,644 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_acc': [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0],
+ 'train_acc': [9.9025,
+               9.93,
+               10.0425,
+               9.925,
+               9.9775,
+               9.9375,
+               9.9075,
+               9.9525,
+               9.935,
+               9.8925],
+ 'val_acc': [10.2, 10.2, 10.2, 10.2, 10.2, 10.2, 10.2, 10.2, 10.2, 10.2]}
+2023-09-03 21:22:41,644 - root - INFO - LOSS
+2023-09-03 21:22:41,644 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_loss': [4974832.6456,
+               4993864.9964,
+               4579860.4752,
+               4401578.3228,
+               4560730.6872,
+               4759174.2424,
+               4500100.3932,
+               4805537.1096,
+               4465005.306,
+               4755701.8216],
+ 'train_loss': [nan, nan, nan, nan, nan, nan, nan, nan, nan, nan],
+ 'val_loss': [4828002.1056,
+              4844606.4088,
+              4458996.5896,
+              4290862.7656,
+              4440344.286,
+              4621334.5264,
+              4384402.416,
+              4668722.7424,
+              4347003.4664,
+              4622226.2224]}
+2023-09-04 01:13:01,986 - root - INFO - --------------------- Iniciando Novo Treinamento 49 ---------------------
+2023-09-04 01:13:01,986 - root - INFO - Parametros
+2023-09-04 01:13:01,986 - root - INFO - {'batch_size': 32,
+ 'dataset': 'CIFAR10',
+ 'epochs': 10,
+ 'learning_rate': 0.1,
+ 'network': 'VGG16',
+ 'num_workers': 1}
+2023-09-04 01:13:01,986 - root - INFO - Construindo dataset para a rede VGG16
+2023-09-04 01:13:03,921 - root - INFO - VGG16(
+  (layer1): Sequential(
+    (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer2): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer3): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer4): Sequential(
+    (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer5): Sequential(
+    (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer6): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer7): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer8): Sequential(
+    (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer9): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer10): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer11): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer12): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (layer13): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Sequential(
+    (0): Linear(in_features=25088, out_features=4096, bias=True)
+    (1): ReLU()
+    (2): Dropout(p=0.5, inplace=False)
+  )
+  (fc1): Sequential(
+    (0): Linear(in_features=4096, out_features=4096, bias=True)
+    (1): ReLU()
+    (2): Dropout(p=0.5, inplace=False)
+  )
+  (fc2): Sequential(
+    (0): Linear(in_features=4096, out_features=10, bias=True)
+  )
+)
+2023-09-04 01:13:03,922 - root - INFO - Iniciando treinamento
+2023-09-04 01:13:03,922 - root - INFO - Epoch 1
+-------------------------------
