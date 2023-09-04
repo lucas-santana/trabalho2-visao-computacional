@@ -30,7 +30,7 @@ from networks.VGG11 import VGG11
 
 from plot import plot_loss, plot_acc, plot_confusion_matrix, plot_samples, save_plots
 
-from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result
+from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result, check_model_exist
 
 """
     https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-lenet5-cifar10.ipynb
@@ -368,8 +368,16 @@ def model_eval(experiment_id, train_time = -1):
     data = build_data(network, dataset, batch_size = batch_size, num_workers=num_workers)
         
     model = get_model(network, data.num_classes, data.gray_scale)
-    model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
-
+    
+    if check_model_exist(experiment_id):
+        model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
+        # Calcular a acuracia de teste para o melhor modelo
+        loss_fn = nn.CrossEntropyLoss()
+        test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, 0)
+        val_loss, val_acc = validation_loop(data.valid_dataloader, model, loss_fn, 0)
+        save_acc_result(experiment_id, test_acc, val_acc, train_time)
+    
+    
     # carregar arquivo csv para plotar grafico acurácias
     train_accuracies, val_accuracies, test_accuracies = get_acc_data(experiment_id)
     train_losses, val_losses, test_losses = get_loss_data(experiment_id)
@@ -380,13 +388,6 @@ def model_eval(experiment_id, train_time = -1):
     
     y_pred, y_true = get_pred(experiment_id)
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
-    
-    # Calcular a acuracia de teste para o melhor modelo
-    loss_fn = nn.CrossEntropyLoss()
-    test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, 0)
-    val_loss, val_acc = validation_loop(data.valid_dataloader, model, loss_fn, 0)
-        
-    save_acc_result(experiment_id, test_acc, val_acc, train_time)
     
 def get_pred(exp_id):
     """

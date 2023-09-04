@@ -48,7 +48,8 @@ def plot_confusion_matrix(experiment_id, data, y_pred, y_true):
     df_cm.to_csv(f'results/experiment_{experiment_id}/df_cm.csv')
     
     plt.figure(figsize = (12, 7))
-    sn.heatmap(df_cm, annot=True, cbar=None, cmap="OrRd",fmt="d")
+    sn.heatmap(df_cm, annot=True, cbar=None, cmap="Blues",fmt="")
+    
     
     plt.title("Matriz de confusão"), plt.tight_layout()
 

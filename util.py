@@ -38,6 +38,12 @@ def check_exp_exist(exp_id):
     if my_file.is_file():
         return True
 
+def check_model_exist(exp_id):
+    filename = f'results/experiment_{exp_id}/model/model.pth'
+    my_file = Path(filename)
+    if my_file.is_file():
+        return True
+    
 def get_acc_data(exp_id):
     """Ler o arquivo do histórico de acurácias
 
