@@ -35,7 +35,7 @@ def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Los
     f.savefig(f'results/experiment_{experiment_id}/loss.pdf')
     
 def plot_confusion_matrix(experiment_id, data, y_pred, y_true):
-    
+    # https://pt.linkedin.com/pulse/conceito-na-pr%C3%A1tica-matriz-de-confus%C3%A3o-fernando-anselmo
     # constant for classes
     classes = data.classes
 
