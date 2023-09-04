@@ -12,6 +12,8 @@ class VGG16(nn.Module):
         else:
             in_channels = 3
         
+        
+        #------------------------------------BLOCO 1------------------------------------
         # conv3-64
         self.layer1 = nn.Sequential(
             nn.Conv2d(1*in_channels, 64*in_channels, kernel_size=3, stride=1, padding=1),
@@ -25,6 +27,7 @@ class VGG16(nn.Module):
             nn.ReLU(), 
             nn.MaxPool2d(kernel_size = 2, stride = 2))
         
+        #------------------------------------BLOCO 2------------------------------------
         # conv3-128
         self.layer3 = nn.Sequential(
             nn.Conv2d(64*in_channels, 128*in_channels, kernel_size=3, stride=1, padding=1),
@@ -38,7 +41,7 @@ class VGG16(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size = 2, stride = 2))
         
-        
+        #------------------------------------BLOCO 3------------------------------------
         # conv3-256 
         self.layer5 = nn.Sequential(
             nn.Conv2d(128*in_channels, 256*in_channels, kernel_size=3, stride=1, padding=1),
@@ -57,7 +60,7 @@ class VGG16(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size = 2, stride = 2))
         
-        
+        #------------------------------------BLOCO 4------------------------------------
         # conv3-512
         self.layer8 = nn.Sequential(
             nn.Conv2d(256*in_channels, 512*in_channels, kernel_size=3, stride=1, padding=1),
@@ -77,6 +80,7 @@ class VGG16(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size = 2, stride = 2))
         
+        #------------------------------------BLOCO 5------------------------------------
         # conv3-512
         self.layer11 = nn.Sequential(
             nn.Conv2d(512*in_channels, 512*in_channels, kernel_size=3, stride=1, padding=1),
@@ -95,6 +99,7 @@ class VGG16(nn.Module):
             nn.BatchNorm2d(512*in_channels),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size = 2, stride = 2))
+        
         
         # FC-4096
         self.fc = nn.Sequential(
