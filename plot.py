@@ -35,29 +35,27 @@ def plot_loss(experiment_id, train_losses, eval_losses, title="Perda de Treino v
     f.savefig(f'results/experiment_{experiment_id}/{filename}')
     
 def plot_confusion_matrix(experiment_id, data, y_pred, y_true):
-    # https://pt.linkedin.com/pulse/conceito-na-pr%C3%A1tica-matriz-de-confus%C3%A3o-fernando-anselmo
+    
     # constant for classes
     classes = data.classes
 
     # Build confusion matrix
     cf_matrix = confusion_matrix(y_true, y_pred)
+    cf_matrix_percent = cf_matrix.astype('float') / cf_matrix.sum(axis=1)[:, np.newaxis]
     
     # Create pandas dataframe
-    df_cm = pd.DataFrame(cf_matrix, index=classes, columns=classes)
-    
-    df_cm.to_csv(f'results/experiment_{experiment_id}/df_cm.csv')
+    df_cm = pd.DataFrame(cf_matrix_percent, index=classes, columns=classes)
     
     plt.figure(figsize = (12, 7))
-    sn.heatmap(df_cm, annot=True, cbar=None, cmap="Blues",fmt="")
+    sn.heatmap(df_cm, annot=True, fmt='.2%', cbar=None, cmap="Blues")
     
+    accuracy = 100*np.trace(cf_matrix) / np.sum(cf_matrix)
     
-    plt.title("Matriz de confusão"), plt.tight_layout()
-
-    plt.ylabel("True Class"), 
-    plt.xlabel("Predicted Class")
+    plt.title("Acurácia: {:.2f}%".format(accuracy)), plt.tight_layout()
     
     plt.savefig(f'results/experiment_{experiment_id}/cm.pdf')
-
+    
+    df_cm.to_csv(f'results/experiment_{experiment_id}/df_cm.csv')
 def plot_samples(experiment_id, dataloader):
     for images, _ in dataloader:
         print('images.shape:', images.shape)
