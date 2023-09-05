@@ -307,6 +307,7 @@ def model_train(experiment_id):
         if (epoch + 1) % 5 == 0:
             plot_acc(experiment_id, train_accuracies, val_accuracies, filename="partial_acc.pdf")
             plot_loss(experiment_id, train_losses, val_losses, filename="partial_loss.pdf")
+            save_plots(experiment_id, train_accuracies, val_accuracies, train_losses, val_losses, filename_acc="partial_train_val_acc.pdf", filename_loss="partial_train_val_loss.pdf")
     
     end_time = time.perf_counter()
     train_time = end_time - start_time

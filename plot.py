@@ -67,7 +67,7 @@ def plot_samples(experiment_id, dataloader):
         f.savefig(f'results/experiment_{experiment_id}/image_grid.pdf')
         break
 
-def save_plots(experiment_id, train_acc, valid_acc, train_loss, valid_loss):
+def save_plots(experiment_id, train_acc, valid_acc, train_loss, valid_loss, filename_acc="train_val_acc.pdf", filename_loss="train_val_loss.pdf"):
     """
         Salvar graficos de loss e acurácia
     """
