@@ -10,7 +10,7 @@ import pandas as pd
 from torchvision.utils import make_grid
 from sklearn.metrics import confusion_matrix
 
-def plot_acc(experiment_id, train_accu, eval_accu, title="Train vs Test Accuracy"):
+def plot_acc(experiment_id, train_accu, eval_accu, title="Train vs Test Accuracy", filename="acc.pdf"):
     f = plt.figure() # gera uma figura do gr ́afico (antes de desenh ́a-lo)
 
     plt.plot(train_accu,'-o')
@@ -20,9 +20,9 @@ def plot_acc(experiment_id, train_accu, eval_accu, title="Train vs Test Accuracy
     plt.legend(['Treino','Teste'])
     plt.title(title)
     
-    f.savefig(f'results/experiment_{experiment_id}/acc.pdf')
+    f.savefig(f'results/experiment_{experiment_id}/{filename}')
     
-def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Losses"):
+def plot_loss(experiment_id, train_losses, eval_losses, title="Perda de Treino vs Validação", filename="loss.pdf"):
     f = plt.figure() # gera uma figura do gr ́afico (antes de desenh ́a-lo)
 
     plt.plot(train_losses,'-o')
@@ -32,7 +32,7 @@ def plot_loss(experiment_id, train_losses, eval_losses, title="Train vs Test Los
     plt.legend(['Treino','Teste'])
     plt.title(title)
     
-    f.savefig(f'results/experiment_{experiment_id}/loss.pdf')
+    f.savefig(f'results/experiment_{experiment_id}/{filename}')
     
 def plot_confusion_matrix(experiment_id, data, y_pred, y_true):
     # https://pt.linkedin.com/pulse/conceito-na-pr%C3%A1tica-matriz-de-confus%C3%A3o-fernando-anselmo

@@ -302,6 +302,11 @@ def model_train(experiment_id):
         logging.info(f"test acc from best model : {best_model_test_acc}")
         
         print(f"test acc from best model : {best_model_test_acc}")
+        
+        #----------- Plot parcial --------------
+        if (epoch + 1) % 5 == 0:
+            plot_acc(experiment_id, train_accuracies, val_accuracies, filename="partial_acc.pdf")
+            plot_loss(experiment_id, train_losses, val_losses, filename="partial_loss.pdf")
     
     end_time = time.perf_counter()
     train_time = end_time - start_time
