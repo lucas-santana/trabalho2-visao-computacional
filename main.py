@@ -20,6 +20,7 @@ import time
 import logging
 import gc
 
+from torch import nn
 from torch.cuda.amp import GradScaler
 from torch.cuda.amp import autocast
 from torchvision import datasets, transforms
@@ -30,9 +31,7 @@ from tqdm import tqdm
 #------------------------------------------------------------
 from DatasetTypeEnum import DataSetType
 from NetworksEnum import Networks
-from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result,check_exp_exist, check_model_exist
-
-from Hyperparameters import batch_size, learning_rate, weight_decay, momentum
+from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result,check_exp_exist, check_model_exist, get_pred, save_pred
 
 from DataSet import DataSet
 
@@ -53,6 +52,38 @@ logging.getLogger("matplotlib").setLevel(logging.CRITICAL)
 torch.manual_seed(7)
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print(f"Using {device} device")
+
+def build_data(network, dataset, batch_size, num_workers=0):
+    if network == Networks.LENET5.value:
+        logging.info(f"Construindo dataset para a rede LENET5")
+        data = DataSet(dataset, batch_size=batch_size, input_size=32, num_workers=num_workers)
+    elif network == Networks.ALEXNET.value:
+        logging.info(f"Construindo dataset para a rede ALEXNET")
+        data = DataSet(dataset, batch_size=batch_size, input_size=227, num_workers=num_workers)
+    elif network == Networks.VGG16.value:
+        logging.info(f"Construindo dataset para a rede VGG16")
+        data = DataSet(dataset, batch_size=batch_size, input_size=224, num_workers=num_workers)
+    elif network == Networks.VGG11.value:
+        logging.info(f"Construindo dataset para a rede VGG11")
+        data = DataSet(dataset, batch_size=batch_size, input_size=224, num_workers=num_workers)
+    else:
+        raise Exception("Network not supported: ", network)
+    
+    return data
+
+def get_model(network, num_classes, gray_scale):
+    if network == Networks.LENET5.value:
+        model = LeNet5(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    elif network == Networks.ALEXNET.value:
+        model = AlexNet(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    elif network == Networks.VGG16.value:
+        model = VGG16(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    elif network == Networks.VGG11.value:
+        model = VGG11(num_classes=num_classes, gray_scale=gray_scale).to(device)
+    else:
+        raise Exception("Network not supported: ", network,)
+    
+    return model
 
 def train_loop(dataloader, model, loss_fn, optimizer, epoch):
     running_loss = 0.0
@@ -84,7 +115,7 @@ def train_loop(dataloader, model, loss_fn, optimizer, epoch):
         # Runs the forward pass with autocasting.
         with autocast():
             # Compute prediction and loss
-            # forward pass        
+            # forward pass
             pred = model(X) # Faz a predição para os valores atuais dos parâmetros
             loss = loss_fn(pred, y)  # Estima o valor da função de perda
         
@@ -196,38 +227,6 @@ def test_loop(dataloader, model, loss_fn, epoch=None):
     print('Test Loss: %.3f | Accuracy: %.3f'%(test_loss, accu)) 
 
     return test_loss, accu
-
-def build_data(network, dataset, batch_size, num_workers=0):
-    if network == Networks.LENET5.value:
-        logging.info(f"Construindo dataset para a rede LENET5")
-        data = DataSet(dataset, batch_size=batch_size, input_size=32, num_workers=num_workers)
-    elif network == Networks.ALEXNET.value:
-        logging.info(f"Construindo dataset para a rede ALEXNET")
-        data = DataSet(dataset, batch_size=batch_size, input_size=227, num_workers=num_workers)
-    elif network == Networks.VGG16.value:
-        logging.info(f"Construindo dataset para a rede VGG16")
-        data = DataSet(dataset, batch_size=batch_size, input_size=224, num_workers=num_workers)
-    elif network == Networks.VGG11.value:
-        logging.info(f"Construindo dataset para a rede VGG11")
-        data = DataSet(dataset, batch_size=batch_size, input_size=224, num_workers=num_workers)
-    else:
-        raise Exception("Network not supported: ", network)
-    
-    return data
-
-def get_model(network, num_classes, gray_scale):
-    if network == Networks.LENET5.value:
-        model = LeNet5(num_classes=num_classes, gray_scale=gray_scale).to(device)
-    elif network == Networks.ALEXNET.value:
-        model = AlexNet(num_classes=num_classes, gray_scale=gray_scale).to(device)
-    elif network == Networks.VGG16.value:
-        model = VGG16(num_classes=num_classes, gray_scale=gray_scale).to(device)
-    elif network == Networks.VGG11.value:
-        model = VGG11(num_classes=num_classes, gray_scale=gray_scale).to(device)
-    else:
-        raise Exception("Network not supported: ", network)
-    
-    return model
 
 def model_train(experiment_id):
     """
@@ -403,6 +402,42 @@ def model_eval(experiment_id, train_time = -1):
     y_pred, y_true = get_pred(experiment_id)
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
     
+    
+def get_pred(exp_id):
+    """
+        ler arquivo predicoes predictions.csv
+    """
+    predictions_filename = f'results/experiment_{exp_id}/predictions.csv'
+    data = pd.read_csv(predictions_filename)
+    
+    return data['target'], data['prediction']
+
+def save_pred(experiment_id, model, dataloader):
+    """
+        Salvar predições no arquivo predictions.csv
+    """
+    y_pred = []
+    y_true = []
+
+    model.eval()
+    # iterate over test data
+    for inputs, labels in dataloader:
+        
+        inputs, labels = inputs.to(device), labels.to(device)
+        
+        outputs = model(inputs)
+        _, preds = torch.max(outputs, 1)
+        y_pred.extend(preds.cpu().numpy())
+        y_true.extend(labels.cpu().numpy())
+
+    tab_pred = {"target": y_true,
+               "prediction": y_pred
+    }
+
+    df_pred = pd.DataFrame(tab_pred)
+    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
+
+
 def get_pred(exp_id):
     """
         ler arquivo predicoes predictions.csv

@@ -91,3 +91,37 @@ def save_acc_result(exp_id, test_acc, val_acc, train_time=-1):
     
     df_acc = pd.DataFrame(tab_acc)
     df_acc.to_csv(acc_file, mode='a', index=False, header=False, float_format='%.2f')
+
+def get_pred(exp_id):
+    """
+        ler arquivo predicoes predictions.csv
+    """
+    predictions_filename = f'results/experiment_{exp_id}/predictions.csv'
+    data = pd.read_csv(predictions_filename)
+    
+    return data['target'], data['prediction']
+
+def save_pred(experiment_id, model, dataloader):
+    """
+        Salvar predições no arquivo predictions.csv
+    """
+    y_pred = []
+    y_true = []
+
+    model.eval()
+    # iterate over test data
+    for inputs, labels in dataloader:
+        
+        inputs, labels = inputs.to(device), labels.to(device)
+        
+        outputs = model(inputs)
+        _, preds = torch.max(outputs, 1)
+        y_pred.extend(preds.cpu().numpy())
+        y_true.extend(labels.cpu().numpy())
+
+    tab_pred = {"target": y_true,
+               "prediction": y_pred
+    }
+
+    df_pred = pd.DataFrame(tab_pred)
+    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
