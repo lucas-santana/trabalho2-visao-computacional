@@ -994,3 +994,9 @@
               0.9431570800304413,
               1.0696390195131302,
               1.0598886406898498]}
+2023-09-08 01:57:46,975 - root - INFO - --------------------- Iniciando Teste 3 ---------------------
+2023-09-08 01:57:46,975 - root - INFO - Rodando evaluation
+2023-09-08 01:57:46,975 - root - INFO - Construindo dataset para a rede LENET5
+2023-09-08 01:58:24,069 - root - INFO - --------------------- Iniciando Teste 3 ---------------------
+2023-09-08 01:58:24,069 - root - INFO - Rodando evaluation
+2023-09-08 01:58:24,069 - root - INFO - Construindo dataset para a rede LENET5

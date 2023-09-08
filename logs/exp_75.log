@@ -516,3 +516,6 @@
               1.4023285331249238,
               1.37358073925972,
               1.2803501502513885]}
+2023-09-08 02:04:15,268 - root - INFO - --------------------- Iniciando Teste 75 ---------------------
+2023-09-08 02:04:15,271 - root - INFO - Rodando evaluation
+2023-09-08 02:04:15,272 - root - INFO - Construindo dataset para a rede VGG11

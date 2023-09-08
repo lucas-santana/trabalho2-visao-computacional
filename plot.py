@@ -10,6 +10,8 @@ import pandas as pd
 from torchvision.utils import make_grid
 from sklearn.metrics import confusion_matrix
 
+from util import save_eval_acc_result
+
 def plot_acc(experiment_id, train_accu, eval_accu, title="Train vs Test Accuracy", filename="acc.pdf"):
     f = plt.figure() # gera uma figura do gr ́afico (antes de desenh ́a-lo)
 
@@ -50,6 +52,8 @@ def plot_confusion_matrix(experiment_id, data, y_pred, y_true):
     sn.heatmap(df_cm, annot=True, fmt='.2%', cbar=None, cmap="Blues")
     
     accuracy = 100*np.trace(cf_matrix) / np.sum(cf_matrix)
+    
+    save_eval_acc_result(experiment_id, accuracy)
     
     plt.title("Acurácia: {:.2f}%".format(accuracy)), plt.tight_layout()
     
