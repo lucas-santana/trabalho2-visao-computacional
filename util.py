@@ -91,3 +91,21 @@ def save_acc_result(exp_id, test_acc, val_acc, train_time=-1):
     
     df_acc = pd.DataFrame(tab_acc)
     df_acc.to_csv(acc_file, mode='a', index=False, header=False, float_format='%.2f')
+
+def save_eval_acc_result(exp_id, test_acc):
+    """Salvar acurácia de teste, validação e tempo de treinamento no arquivo acc_experiments.csv
+
+    Args:
+        exp_id (_type_): _description_
+        test_acc (_type_): _description_
+        val_acc (_type_): _description_
+        train_time (int, optional): _description_. Defaults to -1.
+    """
+    acc_file = f'results/eval_acc_experiments.csv'
+        
+    tab_acc = {"exp_id": [exp_id],
+               "test_acc": [test_acc]
+            }
+    
+    df_acc = pd.DataFrame(tab_acc)
+    df_acc.to_csv(acc_file, mode='a', index=False, header=False, float_format='%.2f')

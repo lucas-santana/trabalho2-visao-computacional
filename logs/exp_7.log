@@ -645,3 +645,6 @@
               0.2912495572467645,
               0.2623845249762138,
               0.2746357707778613]}
+2023-09-08 01:58:44,715 - root - INFO - --------------------- Iniciando Teste 7 ---------------------
+2023-09-08 01:58:44,715 - root - INFO - Rodando evaluation
+2023-09-08 01:58:44,715 - root - INFO - Construindo dataset para a rede LENET5

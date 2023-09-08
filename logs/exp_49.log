@@ -300,3 +300,6 @@
 2023-09-04 01:13:03,922 - root - INFO - Iniciando treinamento
 2023-09-04 01:13:03,922 - root - INFO - Epoch 1
 -------------------------------
+2023-09-08 02:01:51,773 - root - INFO - --------------------- Iniciando Teste 49 ---------------------
+2023-09-08 02:01:51,776 - root - INFO - Rodando evaluation
+2023-09-08 02:01:51,777 - root - INFO - Construindo dataset para a rede VGG16

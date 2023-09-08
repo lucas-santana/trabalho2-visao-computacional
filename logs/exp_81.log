@@ -1520,3 +1520,6 @@
               0.7889081498146057,
               1.0269593318462371,
               0.8756844629347325]}
+2023-09-08 02:04:48,383 - root - INFO - --------------------- Iniciando Teste 81 ---------------------
+2023-09-08 02:04:48,383 - root - INFO - Rodando evaluation
+2023-09-08 02:04:48,386 - root - INFO - Construindo dataset para a rede ALEXNET
