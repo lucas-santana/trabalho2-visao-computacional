@@ -1,11 +1,11 @@
 ,airplane,automobile,bird,cat,deer,dog,frog,horse,ship,truck
 airplane,,,,,,,,,,
 automobile,,,,,,,,,,
-bird,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+bird,,,,,,,,,,
 cat,,,,,,,,,,
 deer,,,,,,,,,,
 dog,,,,,,,,,,
 frog,,,,,,,,,,
 horse,,,,,,,,,,
-ship,,,,,,,,,,
+ship,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
 truck,,,,,,,,,,
