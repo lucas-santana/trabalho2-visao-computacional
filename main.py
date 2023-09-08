@@ -301,6 +301,8 @@ def model_train(experiment_id):
             valid_loss_min = valid_loss
             best_model_test_acc = test_acc
             best_model_val_acc = valid_acc
+            
+            save_pred(experiment_id, model, data.test_dataloader)
             # torch.save(model.state_dict(), f"results/experiment_{experiment_id}/model/model.pth")
         
         logging.info(f"Época {epoch+1}/{num_epochs}")
@@ -353,9 +355,7 @@ def model_train(experiment_id):
     plot_loss(experiment_id, train_losses, val_losses)
     save_plots(experiment_id, train_accuracies, val_accuracies, train_losses, val_losses)
     
-    save_pred(experiment_id, model, data.test_dataloader)
-    
-    y_pred, y_true = get_pred(experiment_id)
+    y_true, y_pred = get_pred(experiment_id)
     
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
     
@@ -402,8 +402,7 @@ def model_eval(experiment_id, train_time = -1):
     plot_acc(experiment_id, train_accuracies, val_accuracies)
     plot_loss(experiment_id, train_losses, val_losses)
     
-    
-    y_pred, y_true = get_pred(experiment_id)
+    y_true, y_pred = get_pred(experiment_id)
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
 
 def get_pred(exp_id):
@@ -438,6 +437,7 @@ def save_pred(experiment_id, model, dataloader):
     }
 
     df_pred = pd.DataFrame(tab_pred)
+    print("Salvando arquivo predictions.csv")
     df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
 
 def main():
