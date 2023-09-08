@@ -31,7 +31,7 @@ from tqdm import tqdm
 #------------------------------------------------------------
 from DatasetTypeEnum import DataSetType
 from NetworksEnum import Networks
-from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result,check_exp_exist, check_model_exist, get_pred, save_pred
+from util import make_experiment_folder, parse_exp_json, get_acc_data, get_loss_data, save_acc_result,check_exp_exist, check_model_exist
 
 from DataSet import DataSet
 
@@ -388,6 +388,9 @@ def model_eval(experiment_id, train_time = -1):
         loss_fn = nn.CrossEntropyLoss()
         test_loss, test_acc = test_loop(data.test_dataloader, model, loss_fn, 0)
         val_loss, val_acc = validation_loop(data.valid_dataloader, model, loss_fn, 0)
+        
+        save_pred(experiment_id, model, data.test_dataloader)
+        
         save_acc_result(experiment_id, test_acc, val_acc, train_time)
     
     
@@ -401,42 +404,6 @@ def model_eval(experiment_id, train_time = -1):
     
     y_pred, y_true = get_pred(experiment_id)
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
-    
-    
-def get_pred(exp_id):
-    """
-        ler arquivo predicoes predictions.csv
-    """
-    predictions_filename = f'results/experiment_{exp_id}/predictions.csv'
-    data = pd.read_csv(predictions_filename)
-    
-    return data['target'], data['prediction']
-
-def save_pred(experiment_id, model, dataloader):
-    """
-        Salvar predições no arquivo predictions.csv
-    """
-    y_pred = []
-    y_true = []
-
-    model.eval()
-    # iterate over test data
-    for inputs, labels in dataloader:
-        
-        inputs, labels = inputs.to(device), labels.to(device)
-        
-        outputs = model(inputs)
-        _, preds = torch.max(outputs, 1)
-        y_pred.extend(preds.cpu().numpy())
-        y_true.extend(labels.cpu().numpy())
-
-    tab_pred = {"target": y_true,
-               "prediction": y_pred
-    }
-
-    df_pred = pd.DataFrame(tab_pred)
-    df_pred.to_csv(f'results/experiment_{experiment_id}/predictions.csv', index=False)
-
 
 def get_pred(exp_id):
     """
