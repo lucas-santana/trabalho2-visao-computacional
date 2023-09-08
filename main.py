@@ -383,6 +383,7 @@ def model_eval(experiment_id, train_time = -1):
     model = get_model(network, data.num_classes, data.gray_scale)
     
     if check_model_exist(experiment_id):
+        print("Carregando o modelo")
         model.load_state_dict(torch.load(f"results/experiment_{experiment_id}/model/model.pth"))
         # Calcular a acuracia de teste para o melhor modelo
         loss_fn = nn.CrossEntropyLoss()
