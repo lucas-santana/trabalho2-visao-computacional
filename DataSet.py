@@ -1,9 +1,12 @@
+import matplotlib.pyplot as plt
+
 from torchvision import datasets
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from DatasetTypeEnum import DataSetType
 from torch.utils.data import random_split
-import matplotlib.pyplot as plt
+
+from Fer2013 import Fer2013
 
 class DataSet():
     def __init__(self, dataset_type, batch_size, input_size, num_workers=0):
@@ -76,6 +79,7 @@ class DataSet():
                     download=True,
                     transform = transform
             )
+
         elif self.dataset_type == DataSetType.FER2013.value:
             """
                 The data consists of 48x48 pixel grayscale images of faces.
@@ -85,37 +89,36 @@ class DataSet():
             """
             self.gray_scale = True
             self.dataset_name = 'FER2013'
-
-            self.training_data = datasets.FER2013(
-                        root="data",
-                        train=True,
-                        download=True,
-                        transform = transform
-            )
             
-            self.test_data = datasets.FER2013(
-                    root="data",
-                    train=False,
-                    download=True,
-                    transform = transform
-            )
+            transform = transforms.Compose([
+                                        transforms.Resize((input_size, input_size)),
+                                        transforms.ToTensor()])
+            
+            filepath = './data/fer2013/fer2013.csv'
+            
+            self.training_data = Fer2013('./data/fer2013/fer2013.csv', split= "TRAIN", transform= transform)
+            self.valid_data = Fer2013(filepath, split= "PUBLIC_TEST", transform= transform)
+            self.test_data = Fer2013(filepath, split= "PRIVATE_TEST", transform= transform)
+            
+            
         
+        if self.dataset_type == DataSetType.FER2013.value:
+            self.classes = ('Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Suprise', 'Neutral')
+            self.num_classes = len(self.classes)
+            
+            self.train_dataloader = DataLoader(self.training_data, batch_size= batch_size, shuffle= True, num_workers= num_workers)
+            self.valid_dataloader = DataLoader(self.valid_data, batch_size= batch_size, num_workers= num_workers)
+            self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
         else:
-            raise Exception("Dataset not supported!")
-        
-        self.classes = self.training_data.classes
-        self.num_classes = len(self.classes)
-        
-        train_size = int(0.8 * len(self.training_data))
-        valid_size = len(self.training_data) - train_size
+            self.classes = self.training_data.classes
+            self.num_classes = len(self.classes)
+                
+            train_size = int(0.8 * len(self.training_data))
+            valid_size = len(self.training_data) - train_size
 
-        self.training_data, self.valid_data = random_split(self.training_data, [train_size, valid_size])
+            self.training_data, self.valid_data = random_split(self.training_data, [train_size, valid_size])
+            
+            self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
+            self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
+            self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
         
-        # tr_split_len = 100
-        # te_split_len = 10
-        # part_tr = random_split(self.training_data, [tr_split_len, len(self.training_data)-tr_split_len])[0]
-        # part_te = random_split(self.test_data, [te_split_len, len(self.test_data)-te_split_len])[0]
-        
-        self.train_dataloader = DataLoader(self.training_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
-        self.valid_dataloader = DataLoader(self.valid_data, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
-        self.test_dataloader = DataLoader(self.test_data, batch_size=batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
