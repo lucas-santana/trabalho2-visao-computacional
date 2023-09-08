@@ -360,8 +360,6 @@ def model_train(experiment_id):
     plot_confusion_matrix(experiment_id, data, y_pred, y_true)
     
     save_acc_result(experiment_id, best_model_test_acc, best_model_val_acc, train_time)
-    
-    # model_eval(experiment_id, train_time=train_time)
 
 
 def model_eval(experiment_id, train_time = -1):
