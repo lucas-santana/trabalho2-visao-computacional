@@ -351,3 +351,6 @@
 2023-09-08 01:59:47,521 - root - INFO - --------------------- Iniciando Teste 21 ---------------------
 2023-09-08 01:59:47,521 - root - INFO - Rodando evaluation
 2023-09-08 01:59:47,521 - root - INFO - Construindo dataset para a rede ALEXNET
+2023-09-08 03:42:29,547 - root - INFO - --------------------- Iniciando Teste 21 ---------------------
+2023-09-08 03:42:29,547 - root - INFO - Rodando evaluation
+2023-09-08 03:42:29,553 - root - INFO - Construindo dataset para a rede ALEXNET

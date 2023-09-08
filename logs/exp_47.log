@@ -211,3 +211,6 @@
 2023-09-08 02:01:46,194 - root - INFO - --------------------- Iniciando Teste 47 ---------------------
 2023-09-08 02:01:46,199 - root - INFO - Rodando evaluation
 2023-09-08 02:01:46,200 - root - INFO - Construindo dataset para a rede VGG16
+2023-09-08 03:44:29,771 - root - INFO - --------------------- Iniciando Teste 47 ---------------------
+2023-09-08 03:44:29,774 - root - INFO - Rodando evaluation
+2023-09-08 03:44:29,774 - root - INFO - Construindo dataset para a rede VGG16

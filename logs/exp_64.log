@@ -390,3 +390,6 @@
 2023-09-08 02:03:23,056 - root - INFO - --------------------- Iniciando Teste 64 ---------------------
 2023-09-08 02:03:23,056 - root - INFO - Rodando evaluation
 2023-09-08 02:03:23,057 - root - INFO - Construindo dataset para a rede VGG11
+2023-09-08 03:46:06,621 - root - INFO - --------------------- Iniciando Teste 64 ---------------------
+2023-09-08 03:46:06,625 - root - INFO - Rodando evaluation
+2023-09-08 03:46:06,625 - root - INFO - Construindo dataset para a rede VGG11
