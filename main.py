@@ -250,8 +250,14 @@ def model_train(experiment_id):
     
     model = get_model(network, data.num_classes, data.gray_scale)
     
+    n_parameters = sum(p.numel() for p in model.parameters())
+    trainable_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    
     print(f"Model structure: {model}\n\n")
     logging.info(pformat(model))
+    logging.info(f"Numero de parametros: {n_parameters}")
+    print(f"Numero de parametros: {n_parameters}")
+    print(f"Numero de parametros treinaveis: {trainable_parameters}")
     
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
