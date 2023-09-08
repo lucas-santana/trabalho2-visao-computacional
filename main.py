@@ -367,7 +367,6 @@ def model_train(experiment_id):
     
     save_acc_result(experiment_id, best_model_test_acc, best_model_val_acc, train_time)
 
-
 def model_eval(experiment_id, train_time = -1):
     """
         Precisa que modelo esteja salvo para realizar o teste
@@ -467,7 +466,6 @@ def main():
             model_eval(args.experiment_id)
     else:
         logging.error(f"Erro! Experimento {args.experiment_id} não existe")
-
 
 if __name__ == "__main__":
     main()

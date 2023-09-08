@@ -11,9 +11,7 @@ class DataSet():
         print("NUM WORKERS: ", num_workers)
         
         self.dataset_type = dataset_type
-        
-        
-        
+         
         """
             - The output of torchvision datasets are PILImage images of range [0, 1]. 
             - We transform them to Tensors of normalized range [-1, 1].
@@ -78,6 +76,30 @@ class DataSet():
                     download=True,
                     transform = transform
             )
+        elif self.dataset_type == DataSetType.FER2013.value:
+            """
+                The data consists of 48x48 pixel grayscale images of faces.
+                classes (0=Angry, 1=Disgust, 2=Fear, 3=Happy, 4=Sad, 5=Surprise, 6=Neutral)
+                The training set consists of 28,709 examples. 
+                The public test consists of 3,589 examples.
+            """
+            self.gray_scale = True
+            self.dataset_name = 'FER2013'
+
+            self.training_data = datasets.FER2013(
+                        root="data",
+                        train=True,
+                        download=True,
+                        transform = transform
+            )
+            
+            self.test_data = datasets.FER2013(
+                    root="data",
+                    train=False,
+                    download=True,
+                    transform = transform
+            )
+        
         else:
             raise Exception("Dataset not supported!")
         

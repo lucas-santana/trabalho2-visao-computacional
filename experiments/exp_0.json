@@ -1,8 +1,8 @@
 {
-    "network": "VGG16",
-    "dataset": "CIFAR10",
+    "network": "LENET5",
+    "dataset": "FER2013",
     "epochs": 5,
-    "batch_size": 32,
-    "learning_rate": 0.0001,
+    "batch_size": 1024,
+    "learning_rate": 0.001,
     "num_workers": 1
 }
