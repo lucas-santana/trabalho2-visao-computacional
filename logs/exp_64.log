@@ -393,3 +393,205 @@
 2023-09-08 03:46:06,621 - root - INFO - --------------------- Iniciando Teste 64 ---------------------
 2023-09-08 03:46:06,625 - root - INFO - Rodando evaluation
 2023-09-08 03:46:06,625 - root - INFO - Construindo dataset para a rede VGG11
+2023-09-08 15:26:35,269 - root - INFO - --------------------- Iniciando Novo Treinamento 64 ---------------------
+2023-09-08 15:26:35,270 - root - INFO - Parametros
+2023-09-08 15:26:35,270 - root - INFO - {'batch_size': 64,
+ 'dataset': 'CIFAR10',
+ 'epochs': 10,
+ 'learning_rate': 0.0001,
+ 'network': 'VGG11',
+ 'num_workers': 1}
+2023-09-08 15:26:35,270 - root - INFO - Construindo dataset para a rede VGG11
+2023-09-08 15:26:37,300 - root - INFO - VGG11(
+  (layer1): Sequential(
+    (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer2): Sequential(
+    (0): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer3): Sequential(
+    (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+  )
+  (layer4): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer5): Sequential(
+    (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+  )
+  (layer6): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (layer7): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+  )
+  (layer8): Sequential(
+    (0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (fc): Sequential(
+    (0): Linear(in_features=25088, out_features=4096, bias=True)
+    (1): ReLU()
+    (2): Dropout(p=0.5, inplace=False)
+  )
+  (fc1): Sequential(
+    (0): Linear(in_features=4096, out_features=4096, bias=True)
+    (1): ReLU()
+    (2): Dropout(p=0.5, inplace=False)
+  )
+  (fc2): Sequential(
+    (0): Linear(in_features=4096, out_features=10, bias=True)
+  )
+)
+2023-09-08 15:26:37,300 - root - INFO - Iniciando treinamento
+2023-09-08 15:26:37,300 - root - INFO - Epoch 1
+-------------------------------
+2023-09-08 15:29:11,723 - root - INFO - Validation loss decreased from : inf ----> 1.3329778238296508 ----> Saving Model.......
+2023-09-08 15:29:11,723 - root - INFO - Validation acc:  52.99
+2023-09-08 15:29:11,723 - root - INFO - Best Test acc from 0 ----> 53.16
+2023-09-08 15:29:21,314 - root - INFO - Época 1/10
+2023-09-08 15:29:21,314 - root - INFO - loss: 1.8049780849456787 - accuracy: 33.7725 - val_loss: 1.3329778238296508 - val_accuracy: 52.99
+2023-09-08 15:29:21,314 - root - INFO - [Test] ---> accuracy: 53.16 - loss: 1.3348571689605713
+2023-09-08 15:29:21,314 - root - INFO - test acc from best model : 53.16
+2023-09-08 15:29:21,314 - root - INFO - Epoch 2
+-------------------------------
+2023-09-08 15:31:56,627 - root - INFO - Validation loss decreased from : 1.3329778238296508 ----> 0.976743560218811 ----> Saving Model.......
+2023-09-08 15:31:56,627 - root - INFO - Validation acc:  65.73
+2023-09-08 15:31:56,627 - root - INFO - Best Test acc from 53.16 ----> 64.74
+2023-09-08 15:32:06,212 - root - INFO - Época 2/10
+2023-09-08 15:32:06,212 - root - INFO - loss: 1.174209069633484 - accuracy: 58.515 - val_loss: 0.976743560218811 - val_accuracy: 65.73
+2023-09-08 15:32:06,212 - root - INFO - [Test] ---> accuracy: 64.74 - loss: 0.9876305374145508
+2023-09-08 15:32:06,212 - root - INFO - test acc from best model : 64.74
+2023-09-08 15:32:06,212 - root - INFO - Epoch 3
+-------------------------------
+2023-09-08 15:34:41,028 - root - INFO - Validation loss decreased from : 0.976743560218811 ----> 0.8209673340797424 ----> Saving Model.......
+2023-09-08 15:34:41,028 - root - INFO - Validation acc:  71.16
+2023-09-08 15:34:41,028 - root - INFO - Best Test acc from 64.74 ----> 71.28
+2023-09-08 15:34:50,600 - root - INFO - Época 3/10
+2023-09-08 15:34:50,600 - root - INFO - loss: 0.8468648995876312 - accuracy: 70.6225 - val_loss: 0.8209673340797424 - val_accuracy: 71.16
+2023-09-08 15:34:50,601 - root - INFO - [Test] ---> accuracy: 71.28 - loss: 0.8274283647537232
+2023-09-08 15:34:50,601 - root - INFO - test acc from best model : 71.28
+2023-09-08 15:34:50,601 - root - INFO - Epoch 4
+-------------------------------
+2023-09-08 15:37:25,579 - root - INFO - Validation loss decreased from : 0.8209673340797424 ----> 0.765926449394226 ----> Saving Model.......
+2023-09-08 15:37:25,579 - root - INFO - Validation acc:  74.0
+2023-09-08 15:37:25,579 - root - INFO - Best Test acc from 71.28 ----> 73.25
+2023-09-08 15:37:35,168 - root - INFO - Época 4/10
+2023-09-08 15:37:35,168 - root - INFO - loss: 0.5854859303474427 - accuracy: 79.8425 - val_loss: 0.765926449394226 - val_accuracy: 74.0
+2023-09-08 15:37:35,168 - root - INFO - [Test] ---> accuracy: 73.25 - loss: 0.7788264476776123
+2023-09-08 15:37:35,168 - root - INFO - test acc from best model : 73.25
+2023-09-08 15:37:35,168 - root - INFO - Epoch 5
+-------------------------------
+2023-09-08 15:40:09,710 - root - INFO - Época 5/10
+2023-09-08 15:40:09,710 - root - INFO - loss: 0.3384587740778923 - accuracy: 88.48 - val_loss: 0.8719643297195434 - val_accuracy: 74.72999999999999
+2023-09-08 15:40:09,710 - root - INFO - [Test] ---> accuracy: 73.57000000000001 - loss: 0.9072243566513062
+2023-09-08 15:40:09,710 - root - INFO - test acc from best model : 73.25
+2023-09-08 15:40:09,946 - root - INFO - Epoch 6
+-------------------------------
+2023-09-08 15:42:46,906 - root - INFO - Época 6/10
+2023-09-08 15:42:46,906 - root - INFO - loss: 0.16782164344489575 - accuracy: 94.4725 - val_loss: 1.033847759437561 - val_accuracy: 74.33999999999999
+2023-09-08 15:42:46,906 - root - INFO - [Test] ---> accuracy: 74.03999999999999 - loss: 1.0488594947814942
+2023-09-08 15:42:46,906 - root - INFO - test acc from best model : 73.25
+2023-09-08 15:42:46,906 - root - INFO - Epoch 7
+-------------------------------
+2023-09-08 15:45:23,921 - root - INFO - Época 7/10
+2023-09-08 15:45:23,921 - root - INFO - loss: 0.09772609685957431 - accuracy: 96.77 - val_loss: 1.3636165157318114 - val_accuracy: 74.17
+2023-09-08 15:45:23,921 - root - INFO - [Test] ---> accuracy: 73.4 - loss: 1.3799650226593017
+2023-09-08 15:45:23,921 - root - INFO - test acc from best model : 73.25
+2023-09-08 15:45:23,921 - root - INFO - Epoch 8
+-------------------------------
+2023-09-08 15:48:01,061 - root - INFO - Época 8/10
+2023-09-08 15:48:01,061 - root - INFO - loss: 0.07306270088851452 - accuracy: 97.5975 - val_loss: 1.289195348930359 - val_accuracy: 74.9
+2023-09-08 15:48:01,061 - root - INFO - [Test] ---> accuracy: 73.92999999999999 - loss: 1.3097171661376954
+2023-09-08 15:48:01,061 - root - INFO - test acc from best model : 73.25
+2023-09-08 15:48:01,061 - root - INFO - Epoch 9
+-------------------------------
+2023-09-08 15:50:38,128 - root - INFO - Época 9/10
+2023-09-08 15:50:38,128 - root - INFO - loss: 0.06124671096801758 - accuracy: 97.9275 - val_loss: 1.1393522187232972 - val_accuracy: 72.91
+2023-09-08 15:50:38,128 - root - INFO - [Test] ---> accuracy: 72.7 - loss: 1.150169206047058
+2023-09-08 15:50:38,128 - root - INFO - test acc from best model : 73.25
+2023-09-08 15:50:38,128 - root - INFO - Epoch 10
+-------------------------------
+2023-09-08 15:53:14,794 - root - INFO - Época 10/10
+2023-09-08 15:53:14,794 - root - INFO - loss: 0.05202564008831978 - accuracy: 98.2725 - val_loss: 1.3369794719696044 - val_accuracy: 74.77000000000001
+2023-09-08 15:53:14,794 - root - INFO - [Test] ---> accuracy: 74.39 - loss: 1.3611721603393554
+2023-09-08 15:53:14,794 - root - INFO - test acc from best model : 73.25
+2023-09-08 15:53:14,998 - root - INFO - Tempo treinamento:  1597.70 seconds
+2023-09-08 15:53:14,998 - root - INFO - Menor loss: 0.765926449394226
+2023-09-08 15:53:14,998 - root - INFO - Acurácia de teste do melhor modelo: 73.25
+2023-09-08 15:53:14,998 - root - INFO - Métricas
+2023-09-08 15:53:14,998 - root - INFO - ACC
+2023-09-08 15:53:14,998 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_acc': [53.16,
+              64.74,
+              71.28,
+              73.25,
+              73.57000000000001,
+              74.03999999999999,
+              73.4,
+              73.92999999999999,
+              72.7,
+              74.39],
+ 'train_acc': [33.7725,
+               58.515,
+               70.6225,
+               79.8425,
+               88.48,
+               94.4725,
+               96.77,
+               97.5975,
+               97.9275,
+               98.2725],
+ 'val_acc': [52.99,
+             65.73,
+             71.16,
+             74.0,
+             74.72999999999999,
+             74.33999999999999,
+             74.17,
+             74.9,
+             72.91,
+             74.77000000000001]}
+2023-09-08 15:53:14,998 - root - INFO - LOSS
+2023-09-08 15:53:14,998 - root - INFO - {'epoch': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 'test_loss': [1.3348571689605713,
+               0.9876305374145508,
+               0.8274283647537232,
+               0.7788264476776123,
+               0.9072243566513062,
+               1.0488594947814942,
+               1.3799650226593017,
+               1.3097171661376954,
+               1.150169206047058,
+               1.3611721603393554],
+ 'train_loss': [1.8049780849456787,
+                1.174209069633484,
+                0.8468648995876312,
+                0.5854859303474427,
+                0.3384587740778923,
+                0.16782164344489575,
+                0.09772609685957431,
+                0.07306270088851452,
+                0.06124671096801758,
+                0.05202564008831978],
+ 'val_loss': [1.3329778238296508,
+              0.976743560218811,
+              0.8209673340797424,
+              0.765926449394226,
+              0.8719643297195434,
+              1.033847759437561,
+              1.3636165157318114,
+              1.289195348930359,
+              1.1393522187232972,
+              1.3369794719696044]}
